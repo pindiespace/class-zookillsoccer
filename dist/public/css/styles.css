@@ -1,0 +1,84 @@
+body, header, footer, main, section, div {
+      margin:0;
+      border:0;
+      padding:0;
+    }
+
+    #content {
+      position:relative;
+    }
+
+    #game {
+      box-sizing:border-box;
+      position:absolute;
+      display:inline-block;
+      width:600px;
+      height:250px;
+      background-color:#eee;
+      border:2px solid red;
+      background-image: url(/img/arena/bkgnd_1948.png);
+    }
+
+    /* static background objects */
+    .object-background {
+
+    }
+
+    /* objects that can interact */
+    .object-interact {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      /*background-color:black;*/
+      /*border: 1px solid green;*/
+    }
+
+    .object-interact img {
+      width:60px;
+      height:60px;
+    }
+
+    /* objects that can move */
+    .object-move {}
+
+    /* user object */
+    .object-user {}
+
+    /* specific screen objects */
+    .arena {} /* interacts with ball */
+    .ball {} /* interacts with arena, paddle, bricks */
+    .paddle {
+      width:20px;
+      height: 70px;
+      background-color:black;
+      border: 1px solid green;
+      top: 100px;
+      left: 10px;
+      border-radius: 6px;
+      } /* user-controlled, interacts with ball */
+    .brick {} /* interacts with ball */
+
+    #whitehouse {
+      position:absolute;
+      right:0px;
+    }
+
+    #whitehouse img {
+      height:246px;
+    }
+
+    #clinton {
+      left: 400px;
+    }
+
+    #sanders {
+      left: 340px;
+    }
+
+    #kasich {
+      left: 280px;
+    }
+
+    #cruz {
+      left: 220px;
+    }

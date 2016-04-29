@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Trumphouse</title>
+		<!--load CSS-->
+		<link rel="stylesheet" href="css/styles.css" media="all">
+	</head>
+
+	<body>
+		<header>
+			<h1>Trumphouse</h1>
+		</header>
+
+		<main>
+			<section id="content">
+				<div id="game">
+					<!--contains DOM elements, visual objects linked to
+				the game objects. Game objects have the structure:
+			  <div><img ...></div>-->
+				<!--trump (ball, object-interact, object-move)-->
+				<div id="whitehouse" class="">
+					<img src="img/arena/whitehouse.png">
+				</div>
+				<div id="trump" class="object-move object-interact">
+					<img src="img/players/trump.png">
+				</div>
+				<div id="clinton" class="object-move object-interact">
+					<img src="img/bricks/clinton.png">
+				</div>
+				<div id="cruz" class="object-move object-interact">
+					<img src="img/bricks/cruz.png">
+				</div>
+				<div id="kasich" class="object-move object-interact">
+					<img src="img/bricks/kasich.png">
+				</div>
+				<div id="sanders" class="object-move object-interact">
+					<img src="img/bricks/sanders.png">
+				</div>
+				<div id="paddle" class="paddle object-move object-interact">
+				</div>
+			</section>
+		</main>
+
+		<footer>
+			<p>&copy; 2016 Vegan Meat Market.</p>
+		</footer>
+		<script src="js/app.js"></script>
+	</body>
+
+</html>

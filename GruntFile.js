@@ -1,31 +1,47 @@
 /**
- * Created by ritz078 on 14/05/15.
+ * Created by Pete Markiewicz on 5.16.2016.
+ * More complex example at: 
+ * https://css-tricks.com/forums/topic/grunt-browserify-uglify-newer/
  */
 
-module.exports=function(grunt){
+module.exports = function (grunt) {
+
     grunt.initConfig({
+        sass: {
+            dist: {
+                files: {
+                    './dist/public/css/styles.css' : './modules/scss/*.scss'
+                }
+            }
+        },
         browserify:{
             dist:{
                 options:{
                     transform:[['babelify',{'loose':"all"}]]
                 },
                 files: {
-                    './dist/public/js/app.js':['./modules/index.js']
+                    './dist/public/js/app.js':['./modules/js/index.js']
                 }
             }
         },
         watch:{
             scripts:{
-                files:['./modules/*.js'],
+                files:['./modules/js/*.js'],
                 tasks:['browserify']
-            }
+            },
+            sass: {
+                files: ['./modules/scss/*.scss'],
+                tasks: ['sass']
+            },
         }
     });
+
+    grunt.loadNpmTasks('grunt-sass');
 
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default',["watch"]);
-    grunt.registerTask('build',["browserify"]);
+    grunt.registerTask('build',["browserify", 'sass']);
 };
 

@@ -1,15 +1,3 @@
-body, header, footer, main, section, div {
-      margin:0;
-      border:0;
-      padding:0;
-    }
-
-    #content {
-      position:relative;
-    }
-
-    #game {
-     
-    }
-
-  
+/* SCSS File for ES6 boilerplate */
+body {
+  background-color: #eeffcc; }

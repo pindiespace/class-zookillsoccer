@@ -8,21 +8,21 @@
  */
 
 class GamePiece {
-    constructor(credentials){
+    constructor (credentials) {
+    	//TODO: use super();
         this.name = credentials.name;
         this.enrollmentNo = credentials.enrollmentNo
     }
     getName () {
-    	var bob = 10;
+    	var bob = 11; 
         return this.name;
     }
 }
 
+// Create the main Game object
 
-// Create the main Game object.
-
-var cred={
-    name:'Ritesh Kumar',
+var cred = {
+    name:'Forest Trump or Donald Gump',
     enrollmentNo:11115078
 }
 

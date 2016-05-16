@@ -16,14 +16,15 @@ var GamePiece = (function () {
     function GamePiece(credentials) {
         _classCallCheck(this, GamePiece);
 
+        //TODO: use super();
         this.name = credentials.name;
         this.enrollmentNo = credentials.enrollmentNo;
     }
 
-    // Create the main Game object.
+    // Create the main Game object
 
     GamePiece.prototype.getName = function getName() {
-        var bob = 10;
+        var bob = 11;
         return this.name;
     };
 
@@ -31,7 +32,7 @@ var GamePiece = (function () {
 })();
 
 var cred = {
-    name: 'Ritesh Kumar',
+    name: 'Forest Trump or Donald Gump',
     enrollmentNo: 11115078
 };
 

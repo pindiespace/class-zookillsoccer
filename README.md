@@ -34,3 +34,20 @@ A basic game designed to teach concepts in OOP programming. Derived from es6-boi
 7. "git status" (check that changed files were added)
 8. "git commit -m 'first upload'" (commit to upload with this "snapshot")
 9. "git push origin master" (you'll be prompted for username and pwd)
+
+## Adding new ES6 classes
+1. Create a new file, whose name is same as the class (e.g. Something.js for an ES6 class "Animal.js")
+2. Create the ES6 classes in the file. 
+3. It may be useful to create inheritance classes in one files
+     class Animal {...}
+     class Mammal extends Mammal {...}
+   However, it is a common practice to have one class per file
+4. If you are subclassing, remember to put the Import at the top
+   import Animal from './Animal.js'
+   class Mammal extends Animal {...}
+3. Remember to add super() to the subclasses
+4. Export the ES6 class 
+     export {Animal, Mammal}
+5. In the main file (index.js) do an ES6 class import
+     import {Animal, Mammal} from './Animal.js'
+

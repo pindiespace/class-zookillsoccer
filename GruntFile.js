@@ -20,7 +20,10 @@ module.exports = function (grunt) {
         browserify:{
             dist:{
                 options:{
-                    transform:[['babelify',{'loose':"all"}]]
+                    transform:[['babelify',{"presets": ["es2015"]}]],
+                    browserifyOptions: {
+         				debug: true
+      				}
                 },
                 files: {
                     './dist/public/js/app.js':['./modules/js/index.js']

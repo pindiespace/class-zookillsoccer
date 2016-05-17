@@ -1,9 +1,7 @@
-# es6-boilerplate
+# zookillsoccer
 ---------------------
 
-A basic project to get started with es6 using babel, node-sass and browserify. It uses browserify to watch for changes in your JavaScript and SASS (scss) files. If you save a change to JavaScript, browserify will automatically run the Babel transpiler, converting any ES6 code you write into more compatible ES5 code. Likewise, if you save a change to a .scss file, browserify will run the Sass program, converting Sass data to pure CSS.
-
-Inspiration: http://www.sitepoint.com/setting-up-es6-project-using-babel-browserify/
+A basic game designed to teach concepts in OOP programming. Derived from es6-boilerplate on this same site.
 
 ## Setup and installation (Make sure NodeJS is installed)
 1. Open TWO terminal windows

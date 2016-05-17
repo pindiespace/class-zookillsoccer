@@ -1,5 +1,5 @@
 /** 
- * Create ES6 Classes.
+ * Create my ES6 Classes.
  * To make this work, you must be running the Babel transpiler, 
  * and watching for changes in this file with browserify. Two 
  * Terminal windows need to be open:

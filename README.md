@@ -1,7 +1,7 @@
-# browserify-babel-demo
+# es6-boilerplate
 ---------------------
 
-A basic project to get started with es6 using babel and browserify. It uses browserify to watch for changes in your JavaScript. If you save a change, browserify will automatically run the Babel transpiler, converting any ES6 code you write into more compatible ES5 code.
+A basic project to get started with es6 using babel, node-sass and browserify. It uses browserify to watch for changes in your JavaScript and SASS (scss) files. If you save a change to JavaScript, browserify will automatically run the Babel transpiler, converting any ES6 code you write into more compatible ES5 code. Likewise, if you save a change to a .scss file, browserify will run the Sass program, converting Sass data to pure CSS.
 
 Inspiration: http://www.sitepoint.com/setting-up-es6-project-using-babel-browserify/
 
@@ -31,7 +31,7 @@ Inspiration: http://www.sitepoint.com/setting-up-es6-project-using-babel-browser
 2. Create an empty repository with the same name as your project
 3. Navigate into the default directory of the project
 4. "git init"
-5. "git remote add origin https://github.com/your_username/your_projectname"
+5. "git remote add origin https://github.com/your_username/your_projectname.git"
 6. "git add *" (add all changed files to upload)
 7. "git status" (check that changed files were added)
 8. "git commit -m 'first upload'" (commit to upload with this "snapshot")

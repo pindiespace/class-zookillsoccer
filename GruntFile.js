@@ -8,6 +8,9 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         sass: {
+            options: {
+            sourceMap: true
+            },
             dist: {
                 files: {
                     './dist/public/css/styles.css' : './modules/scss/*.scss'

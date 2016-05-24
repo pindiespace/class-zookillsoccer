@@ -21,8 +21,10 @@ A basic game designed to teach concepts in OOP programming. Derived from es6-boi
 ## Using the boilerplate
 1. Make a copy so you have it for future projects
 2. Edit the JavaScript in the /modules folder
-3. Each time you save, you should see some action in Terminal Window #1 as 
+3. Each time you save index.js, you should see some action in Terminal Window #1 as 
    your JavaScript is "transpiled" and copied to the /dist folder
+4. If you use the 'import' command in index.js, the file specified will be "bundled"
+   and added to the app.js file.
 
 ## Adding a Git Repository, and uploading
 1. Log into Github.com

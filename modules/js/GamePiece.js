@@ -10,9 +10,9 @@
  */
 export default class GamePiece {
 
-    constructor (credentials) {
+    constructor (config) {
     	//TODO: use super();
-        this.name = credentials.name;
+        this.name = config.name;
         this.uuid = this.setId();
     }
 

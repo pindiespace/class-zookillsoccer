@@ -1,11 +1,14 @@
 /** 
- * Create the game. Import the primary classes, and 'composit' 
+ * Create the game. Import the primary classes, and 'composite' 
  * the overall Game object out of instances of the classes.
  */
 import GamePiece from './GamePiece.js';
-import Screen from './Screen.js';
+
+//The entire game
+import Game from './Game.js';
 
 //Screen inheritance
+import Screen from './Screen.js';
 import StartScreen from './StartScreen.js';
 import GameScreen from './GameScreen.js';
 import EndScreen from './EndScreen.js';
@@ -49,10 +52,12 @@ var config = {name:'Forest Trump or Donald Gump rulz'};
 var game = new GamePiece(config);
 console.log(game.getName());
 
-//test Screen
-var configScreen1 = {name: 'Opening Screen'};
+//test Game Object
+var myGame = new Game({name: "ZooKillSoccer"});
+console.log(myGame.getName());
 
-var myScreen = new Screen(configScreen1);
+//other objects
+var myScreen = new Screen({name: "Opening Screen"});
 console.log(myScreen.getName());
 
 var myStartScreen = new StartScreen({name: "Start Screen"});
@@ -62,7 +67,7 @@ var myGameScreen = new GameScreen({name: "Game Screen"});
 console.log(myGameScreen.getName());
 
 var myEndScreen = new EndScreen({name: "End Screen"});
-console.log(myGameScreen.getName());
+console.log(myEndScreen.getName());
 
 var myInfo = new Info({name: "Generic Information"});
 console.log(myInfo.getName());

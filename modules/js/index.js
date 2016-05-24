@@ -82,13 +82,48 @@ console.log(myInstructions.getName());
 var myDynamicText = new DynamicText({name: "Generic Dynamic Text Object"});
 console.log(myDynamicText.getName());
 
+var myScore = new Score({name: "scores..."});
+console.log(myScore.getName());
 
+var myCharacter = new Character({name: "Generic Character"});
+console.log(myCharacter.getName());
 
-//test Gorilla
-var myGorilla = new Gorilla({ name: "Spunky"});
+var myTrump = new Trump({name: "Donald Trump"});
+console.log(myTrump.getName());
+
+var myPlayer = new Player({name: "End User"});
+console.log(myPlayer.getName());
+
+var myAnimal = new Animal({name: "Generic Animal"});
+console.log(myAnimal.getName());
+
+var myLion = new Lion({name: "Cowardly the Lion"});
+console.log(myLion.getName());
+
+var myTiger = new Tiger({name: "Chomper the Tiger"});
+console.log(myTiger.getName());
+
+var myBear = new Bear({name: "Mauler the Bear"});
+console.log(myBear.getName());
+
+var myGorilla = new Gorilla({ name: "Spunky the Gorilla"});
 console.log(myGorilla.getName());
 
+var myHealth = new Health({name: "One Health Kit"});
+console.log(myHealth.getName());
 
+//Area inheritance.
+var myArea = new Area({name: "Generic Area"});
+console.log(myArea.getName());
+
+var myCage = new Cage({name: "Generic Area"});
+console.log(myCage.getName());
+
+var myAnimalArea = new AnimalArea({name: "AnimalArea"});
+console.log(myAnimalArea.getName());
+
+var myPlayerArea = new PlayerArea({name: "PlayerArea"});
+console.log(myPlayerArea.getName());
 
 
 

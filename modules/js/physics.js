@@ -12,12 +12,8 @@ export default class Physics {
 
 	}
 
-	collideRects (rect1, rect2) {
+	collideObjects (rect1, rect2) {
 		
 	}
 
-	collideCircles (circle1, circle2) {
-
-	}
-	
 }

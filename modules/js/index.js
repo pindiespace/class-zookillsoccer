@@ -3,10 +3,6 @@
  * the overall Game object out of instances of the classes.
  */
 import GamePiece from './GamePiece.js';
-import Area from './Area.js';
-import {Character, Player} from './Character.js';
-import Info from './Info.js';
-import Screen from './Screen.js';
 
 /** 
  * Set up the game.

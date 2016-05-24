@@ -10,7 +10,8 @@ var express = require('express'),
 // serve static content
 console.log("server running at port 1337");
 
-app.use(express.static(path.join(__dirname, 'dist/public')));
+app.use('/', express.static(path.join(__dirname, 'dist/public')));
+app.use('/test', express.static(path.join(__dirname, 'tests')));
 
 // setup server
 var server = app.listen(1337);

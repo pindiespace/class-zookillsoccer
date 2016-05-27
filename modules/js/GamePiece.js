@@ -34,10 +34,17 @@ export default class GamePiece {
     }
 
     /** 
-     * Return the given name of this object.
+     * Return the given name of this object
      */
     getName () {
         return this.name;
+    }
+
+    /** 
+     * return the class of the object
+     */
+    getClass () {
+        return this.constructor.name;
     }
 
     /** 
@@ -45,6 +52,34 @@ export default class GamePiece {
      */
     getId () {
         return this.uuid;
+    }
+
+    /** 
+     * Get the enclosing box outside the object for external collisions
+     */
+    getCollisionRect () {
+
+    }
+
+    /** 
+     * Get the internal box when this object acts as a container for another
+     */
+    getBoundsRect () {
+
+    }
+
+    /** 
+     * Generic update (override)
+     */
+    update () {
+
+    }
+
+     /** 
+      * generic draw (override)
+      */
+    draw () {
+
     }
 }
 

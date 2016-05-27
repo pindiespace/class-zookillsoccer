@@ -1,5 +1,53 @@
 /* SCSS File for ES6 boilerplate */
+/* ======= DEBUGGING ========= */
+/* ======= style the game screens ======== */
 body {
   background-color: #eee; }
+
+/* for debugging, show all the HTML elements */
+* {
+  border: 1px solid black;
+  margin: 4px;
+  padding: 4px; }
+
+/* Initially hide all the game screens, let game JS show */
+#start-screen, #game-screen, #end-screen {
+  background-color: #eeffcc;
+  display: none; }
+
+/* start-screen */
+/* game-screen */
+/* end-screen */
+/* ======== style the game button ======== */
+/* Main Styles */
+.button {
+  display: inline-block;
+  background-color: #c0392b;
+  margin: auto;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+  transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.4); }
+  .button:hover span {
+    left: -72%;
+    opacity: 0; }
+  .button:hover .icon {
+    width: 100%; }
+    .button:hover .icon .fa {
+      font-size: 45px; }
+  .button.success {
+    background-color: #27ae60; }
+    .button.success .icon .fa-remove {
+      display: none; }
+    .button.success .icon .fa-check {
+      display: inline-block; }
+  .button:hover {
+    opacity: .9; }
+    .button:hover .icon .fa-remove {
+      height: 46px; }
+  .button:active {
+    opacity: 1; }
 
 /*# sourceMappingURL=styles.css.map */

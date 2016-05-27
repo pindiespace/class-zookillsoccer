@@ -1,9 +1,109 @@
 /* SCSS File for ES6 boilerplate */
 
+/* ======= DEBUGGING ========= */
+
+$defaultBorder: 1px solid black;
+$defaultMargin: 4px;
+$defaultPadding: 4px;
+
+/* ======= style the game screens ======== */
+
 $primaryColor: #eeffcc;
 $secondaryColor: #ddd;
 $tertiaryColor: #eee;
 
 body {
 	background-color: $tertiaryColor;
+}
+
+/* for debugging, show all the HTML elements */
+* {
+	border: $defaultBorder;
+	margin: $defaultMargin;
+	padding: $defaultPadding;
+}
+
+/* Initially hide all the game screens, let game JS show */
+#start-screen, #game-screen, #end-screen {
+	background-color: $primaryColor;
+	display:none;
+}
+
+/* start-screen */
+#start-screen {
+
+}
+
+/* game-screen */
+#game-screen {
+	
+}
+
+/* end-screen */
+#end-screen {
+	
+}
+
+/* ======== style the game button ======== */
+
+// Variables
+$color: #c0392b;
+$color-dark: #a53125;
+$speed: "0.25s";
+$transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
+
+/* Main Styles */
+.button {
+	display: inline-block;
+	background-color: $color;
+	margin: auto;
+	color: #fff;
+	cursor: pointer;
+	overflow: hidden;
+	border-radius: 5px;
+	box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
+	transition: $transition;
+	
+	&:hover {
+		
+		span {
+			left: -72%;
+			opacity: 0;
+		}
+		
+		.icon {
+			width: 100%;
+			
+			.fa {
+				font-size: 45px;
+			}
+		}
+	}
+	
+	&.success {
+		background-color: #27ae60;
+		
+		.icon {
+			
+			.fa-remove {
+				display: none;
+			}
+			
+			.fa-check {
+				display: inline-block;
+			}
+		}
+	}
+	
+	&:hover {
+		opacity: .9;
+		
+		.icon .fa-remove {
+			height: 46px;
+		}
+	}
+	
+	&:active {
+		opacity: 1;
+	}
 }

@@ -15,6 +15,8 @@ import EndScreen from './EndScreen.js';
 import Info from './Info.js';
 import Text from './Text.js';
 import StaticText from './StaticText.js';
+import Image from './Image.js';
+import StaticImage from './Image.js';
 import Identity from './Identity.js';
 import Instructions from './Instructions.js';
 import DynamicText from './DynamicText.js';
@@ -76,13 +78,46 @@ export default class Game extends GamePiece {
 		this.loadGame();
 	}
 
+	/** 
+	 * Load Characters
+	 * dynamic Characters (e.g. those that animate) are loaded by Game. 
+	 * Other static visual objects are loaded by Screen classes.
+	 */
+
+	loadPlayers () {
+		this.displayCharacters.push(new Player({name: 'Player', position: {top: 510, left: 200}}));
+	}
+
+	loadAnimals () {
+		this.displayCharacters.push(new Cage({name: 'Lion cage', position: {top: 10, left: 25}}));
+		this.displayCharacters.push(new Cage({name: 'Lion cage', position: {top: 10, left: 125}}));
+		this.displayCharacters.push(new Cage({name: 'Lion cage', position: {top: 10, left: 225}}));
+		this.displayCharacters.push(new Cage({name: 'Lion cage', position: {top: 10, left: 325}}));
+
+	}
+
+	loadTrumps () {
+		this.displayCharacters.push(new Cage({name: 'Trump', position: {top: 450, left: 200}}));
+
+	}
+
 	loadGame () {
+
+		//load Info assets
+
 		console.log("loading splash screen");
 		this.screens[this.END_SCREEN_ID].hideScreen()
 		this.screens[this.START_SCREEN_ID].showScreen();
 	}
 
 	startGame () {
+
+		//load Characters
+		this.loadAnimals();
+		this.loadPlayers();
+		this.loadTrumps();
+
+		//make GameScreen visible
 
 		// initialize elapsed time
 		this.startTime = new Date();

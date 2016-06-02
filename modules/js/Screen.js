@@ -5,6 +5,11 @@
  */
  import GamePiece from './GamePiece.js';
 
+ import Image from './Image.js';
+ import StaticImage from './Image.js';
+ import Identity from './StaticImage.js';
+ import Background from './Background.js';
+
  export default class Screen extends GamePiece {
 
  	constructor (config) {
@@ -26,6 +31,19 @@
  	loadScreen () {
  		console.log("loading:" + this.screenId);
  		this.dom = document.getElementById(this.screenId);
+ 	}
+
+ 	loadBackground (config) {
+ 		this.background = new Background(
+			{
+				name: config.name,
+				domId: config.domId,
+				path: config.path,
+				author: config.author,
+				source: config.source,
+				callback: config.callback
+			} 
+		);
  	}
 
  	showScreen () {

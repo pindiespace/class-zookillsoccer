@@ -9,6 +9,9 @@
 
  	constructor (config) {
  		super(config);
+
+ 		this.setPosition(config.position); //inherited from GamePiece
+
  	}
 
  }

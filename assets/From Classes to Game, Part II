@@ -1,0 +1,236 @@
+Building the Game - Part II Compositing
+
+
+==========================================================================
+1. Change game canvas (in HTML) to 960 x 600
+
+==========================================================================
+2. Add Gereric Identity Assets (replace with your own)
+
+3. Add Generic Screen backgrounds (replace with your own)
+
+
+
+==========================================================================
+1. Add Generic Image assets (replace with your own)
+
+Get the new 'img' folder from the Instructor
+Replace it
+Move your own assets in later
+
+==========================================================================
+1. Add new properties to GamePiece
+===================================
+
+this.position = {top:0, left:0, bottom:0, right:0}
+
+        if (config.position) {
+            this.setPosition(config.position);
+        }
+
+    /** 
+     * Set a position for the object onscreen
+     */
+    setPosition (position) {
+        this.position = position;
+    }
+
+    setReady (val) {
+    	this.ready = val;
+    }
+
+==========================================================================
+1. Move some functions in Game to GameScreen
+
+a. these functions make more sense in a Screen, since they are static.
+
+loadCageArea()
+loadAnimalArea()
+loadPlayerArea()
+
+
+==========================================================================
+1. Add Properties and Methods to StartScreen
+============================
+
+b. Following the Instructor, write the bindStart() function which links 
+   clicking the StartScreen button to moving to the GameScreen
+
+	// Make the start button open the main game screen
+	this.bindStart();
+
+=========================================================================
+2. Add Properties and Methods to GameScreen
+============================
+a. Add new functions
+   loadCages(), loadAnimalArea(), loadPlayerArea(), loadPlayers(), loadAnimals(), loadTrumps()
+
+b. Hide the header and footer
+ 	//GameScreen should hide its local header and footer
+ 	this.hideHeader();
+ 	this.hideFooter();
+
+c. Add calls to new functions in constructor
+ 	// Load sub-objects
+ 	this.cages   = this.loadCages();
+ 	this.animalArea = this.loadAnimalArea();
+ 	this.playerArea = this.loadPlayerArea();
+
+
+===========================================================================
+3. Add Properties and Methods to EndScreen
+============================
+
+a. Add new functions
+   loadInputScore(), loadHighScores(), bindReplay, bindInstructions()
+
+b. Following the Instructor, write the bindReplay() and bindInstructions() 
+   methods linking to Game.startGame() and Game.loadGame()
+
+c. Add calls to new functions in constructor
+ 	// Load EndScreen sub-objects
+ 	this.loadInputScore();
+ 	this.loadHighScores();
+
+ 	// Bind "play again" and "instructions" buttons.
+ 	this.bindReplay();
+ 	this.bindInstructions();
+
+===========================================================================
+8. Add New Properties to Text, and update Screens to support Text and Image
+
+
+ setText(config.text);
+
+setText (txt) {
+	this.text = txt;
+}
+
+Under Screen, import
+
+
+
+===========================================================================
+8. Write endGame Function
+============================
+	endGame () {
+
+		console.log("ending game");
+
+		// reset timer
+		this.startTime = 0;
+
+		// turn off animation
+		cancelAnimationFrame(this.globalId);
+		this.globalId = null;
+
+		// go to end screen
+		this.screens[this.GAME_SCREEN_ID].hideScreen();
+		this.screens[this.END_SCREEN_ID].showScreen();
+	}
+
+===========================================================================
+8. Add StaticImage, a new set of classes inheriting from Info
+===========================
+
+Image - supplied by Instructor
+StaticImage - supplied by Instructor
+Identity - OVER-WRITE YOUR OWN with Instructor version
+
+Add references to Game.js under "info inheritance"
+
+Add the new Composite Screen to your PowerPoint (from the Instructor)
+Update your PowerPoint to reflect the change in inheritance!
+
+===========================================================================
+8. Add loadBackground method to Screen
+
+Add a CSS loader to Screen, which loads an image and sets it as a background image
+
+
+===========================================================================
+8. Add StaticText and Identity to Screen Objects
+
+Import the Info subclasses
+
+
+===========================================================================
+8. Add an StaticImage object to Characters
+
+following the instructor, add new Imports for StaticImage
+Following the Instructor, composite in an StaticImage into the Animal object
+
+===========================================================================
+8. Write the LoadAreas function
+============================
+
+
+
+===========================================================================
+8. Write the loadCharacters functions
+============================
+
+Each object will have different input into its constructor (but all still get name: xxx)
+
+
+
+===========================================================================
+8. Write update() Function
+============================
+	update () {
+
+		for (var i = 0, len = this.displayCharacters; i < len; i++) {
+
+			var character = this.displayCharacters[i];
+
+			switch (character.getClass()) {
+				case 'Player':
+				case 'Trump':
+				case 'Lion':
+				case 'Tiger':
+				case 'Bear':
+				case 'Gorilla':
+				default:
+					break;
+			}
+
+			character.update();
+		}
+	}
+	
+===========================================================================
+8. Write draw() Function
+============================
+	draw () {
+
+		for (var i = 0, len = this.displayCharacters; i < len; i++) {
+
+			var character = this.displayCharacters[i];
+
+			displayCharacters[i].draw();
+		}
+	}
+
+===========================================================================
+8. Write gameLoop() Function
+============================
+	gameLoop () {
+		
+		if (this.checkIfComplete()) {
+			this.endGame();
+			return;
+		}
+
+		this.update();
+		this.draw();
+		
+		//console.log("looping...")
+		this.globalId = requestAnimationFrame(this.gameLoop.bind(this));
+	}
+
+===========================================================================
+9. Add Pre-Built Functions
+
+Using Instructor code, add the following functions
+
+elapsed(), checkIfComplete

@@ -10,6 +10,12 @@
 
  	constructor(config) {
  		super(config);
+
+ 		setText(config.text);
+ 	}
+
+ 	setText (txt) {
+ 		this.text = txt;
  	}
 
  }

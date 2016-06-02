@@ -14,6 +14,19 @@ export default class GamePiece {
     	//TODO: use super();
         this.name = config.name;
         this.uuid = this.setId();
+
+        if (config.position) {
+            this.setPosition(config.position);
+        }
+
+        this.ready = true; // change to false for deferred loads
+    }
+
+    /** 
+     * Set a position for the object onscreen
+     */
+    setPosition (position) {
+        this.position = position;
     }
 
     /** 
@@ -67,6 +80,13 @@ export default class GamePiece {
     getBoundsRect () {
 
     }
+	
+	/** 
+	 * Generic 'ready' function (e.g. for delayed asset loads)
+	 */
+	setReady (val) {
+		this.ready = val;
+	}
 
     /** 
      * Generic update (override)

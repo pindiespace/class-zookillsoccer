@@ -10,5 +10,12 @@ export default class StaticText extends Text {
 
 	constructor (config) {
 		super(config);
+
+		this.static = true;
 	}
+
+	createTextBox (domId, txt) {
+		this.container = document.getElementById(domId);
+	}
+
 }

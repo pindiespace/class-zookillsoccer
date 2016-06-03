@@ -46,15 +46,15 @@ export default class Game extends GamePiece {
 		super(config);
 
 		//game copyright
-		this.warning = "This game belongs to us, and nobody else.";
+		this.warning = 'This game belongs to us, and nobody else.';
 
 		//game reverts to StartScreen if unplayed
-		this.TIMEOUT = 5;
+		this.TIMEOUT = 5555;
 
 		// define Id link to DOM
-		this.START_SCREEN_ID = "start-screen";
-		this.GAME_SCREEN_ID = "game-screen";
-		this.END_SCREEN_ID = "end-screen";
+		this.START_SCREEN_ID = 'start-screen';
+		this.GAME_SCREEN_ID = 'game-screen';
+		this.END_SCREEN_ID = 'end-screen';
 
 		// model storage, screens
 		this.screens = [];
@@ -70,12 +70,22 @@ export default class Game extends GamePiece {
 	init () {
 
 		// Grab the HTML screen elements and encapsulate in a Screen class
-		this.screens[this.START_SCREEN_ID] = new StartScreen({name: "Start Screen", id: this.START_SCREEN_ID, game: this});
-		this.screens[this.GAME_SCREEN_ID] = new GameScreen({name: "Game Screen", id: this.GAME_SCREEN_ID, game: this});
-		this.screens[this.END_SCREEN_ID] = new EndScreen({name: "End Screen", id: this.END_SCREEN_ID, game: this});
+		this.screens[this.START_SCREEN_ID] = new StartScreen({name: 'Start Screen', id: this.START_SCREEN_ID, game: this});
+		this.screens[this.GAME_SCREEN_ID] = new GameScreen({name: 'Game Screen', id: this.GAME_SCREEN_ID, game: this});
+		this.screens[this.END_SCREEN_ID] = new EndScreen({name: 'End Screen', id: this.END_SCREEN_ID, game: this});
+
+		// load the canvas
+		this.loadCanvas();
 
 		// make the start screen visible
 		this.loadGame();
+	}
+
+	// get a reference to the HTML5 canvas context
+	loadCanvas () {
+		this.canvas = document.querySelector('#game-screen-arena canvas');
+		console.log("CANVASSSSSSS:" + this.canvas)
+		this.context = this.canvas.getContext("2d");
 	}
 
 	/** 
@@ -83,21 +93,70 @@ export default class Game extends GamePiece {
 	 * dynamic Characters (e.g. those that animate) are loaded by Game. 
 	 * Other static visual objects are loaded by Screen classes.
 	 */
-
 	loadPlayers () {
-		this.displayCharacters.push(new Player({name: 'Player', position: {top: 510, left: 200}}));
+		this.displayCharacters.push(
+			new Player(
+				{
+					name: 'Player', position: {top: 510, left: 200},
+					path: 'img/players/player.png',
+					game: this
+				}
+			)
+		);
 	}
 
 	loadAnimals () {
-		this.displayCharacters.push(new Cage({name: 'Lion cage', position: {top: 10, left: 25}}));
-		this.displayCharacters.push(new Cage({name: 'Lion cage', position: {top: 10, left: 125}}));
-		this.displayCharacters.push(new Cage({name: 'Lion cage', position: {top: 10, left: 225}}));
-		this.displayCharacters.push(new Cage({name: 'Lion cage', position: {top: 10, left: 325}}));
+		this.displayCharacters.push(
+			new Lion(
+				{
+					name: 'Lion', 
+					position: {top: 10, left: 25},
+					path: 'img/animals/lion.png',
+					game: this
+				}
+			)
+		);
+		this.displayCharacters.push(
+			new Tiger(
+				{
+					name: 'Tiger', 
+					position: {top: 10, left: 125},
+					path: 'img/animals/tiger.png',
+					game: this
+				}
+			)
+		);
+		this.displayCharacters.push(
+			new Bear(
+				{
+					name: 'Bear', position: {top: 10, left: 225},
+					path: 'img/animals/bear.png',
+					game: this
+				}
+			)
+		);
+		this.displayCharacters.push(
+			new Gorilla(
+				{
+					name: 'Gorilla', position: {top: 10, left: 325},
+					path: 'img/animals/gorilla.png',
+					game: this
+				}
+			)
+		);
 
 	}
 
 	loadTrumps () {
-		this.displayCharacters.push(new Cage({name: 'Trump', position: {top: 450, left: 200}}));
+		this.displayCharacters.push(
+			new Trump(
+				{
+					name: 'Trump', position: {top: 450, left: 200},
+					path: 'img/trumps/trump.png',
+					game: this
+				}
+			)
+		);
 
 	}
 
@@ -105,7 +164,7 @@ export default class Game extends GamePiece {
 
 		//load Info assets
 
-		console.log("loading splash screen");
+		console.log('loading splash screen');
 		this.screens[this.END_SCREEN_ID].hideScreen()
 		this.screens[this.START_SCREEN_ID].showScreen();
 	}
@@ -123,7 +182,7 @@ export default class Game extends GamePiece {
 		this.startTime = new Date();
 
 		// show GameScreen, hide others
-		console.log("starting game");
+		console.log('starting game');
 		this.screens[this.START_SCREEN_ID].hideScreen();
 		this.screens[this.END_SCREEN_ID].hideScreen();
 		this.screens[this.GAME_SCREEN_ID].showScreen();
@@ -132,7 +191,7 @@ export default class Game extends GamePiece {
 
 	endGame () {
 
-		console.log("ending game");
+		console.log('ending game');
 
 		// reset timer
 		this.startTime = 0;
@@ -162,7 +221,7 @@ export default class Game extends GamePiece {
 	checkIfComplete () {
 
 		// game logic to see if the game should reset
-		console.log("ELAPSED:" + this.elapsed());
+		/////////////console.log('ELAPSED:' + this.elapsed());
 
 		if (this.elapsed() > this.TIMEOUT) {
 			// if idle too long, reset game to start
@@ -174,7 +233,7 @@ export default class Game extends GamePiece {
 
 	update () {
 
-		for (var i = 0, len = this.displayCharacters; i < len; i++) {
+		for (var i = 0, len = this.displayCharacters.length; i < len; i++) {
 
 			var character = this.displayCharacters[i];
 
@@ -195,11 +254,19 @@ export default class Game extends GamePiece {
 
 	draw () {
 
-		for (var i = 0, len = this.displayCharacters; i < len; i++) {
+		for (var i = 0, len = this.displayCharacters.length; i < len; i++) {
 
 			var character = this.displayCharacters[i];
+			if (character.image) {
+				var img = character.image.data;
+				//TODO: data not being used!!
+				if (img) {
+				// draw image into HTML5 canvas
+ 		 		this.context.drawImage(img, 0, 0, img.width, img.height);
+				}
 
-			displayCharacters[i].draw();
+			}
+
 		}
 	}
 
@@ -209,11 +276,10 @@ export default class Game extends GamePiece {
 			this.endGame();
 			return;
 		}
-
 		this.update();
 		this.draw();
 		
-		//console.log("looping...")
+		//console.log('looping...')
 		this.globalId = requestAnimationFrame(this.gameLoop.bind(this));
 	}
 

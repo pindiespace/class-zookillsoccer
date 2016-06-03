@@ -14,19 +14,30 @@ export default class GamePiece {
     	//TODO: use super();
         this.name = config.name;
         this.uuid = this.setId();
-
-        if (config.position) {
-            this.setPosition(config.position);
-        }
-
         this.ready = true; // change to false for deferred loads
     }
 
     /** 
-     * Set a position for the object onscreen
+     * Set a position for the object, also the position of the 
+     * DOM representation of the object
      */
-    setPosition (position) {
+    setDOMPosition (position) {
         this.position = position;
+        if (this.dom) {
+            this.dom.style.top = position.top + 'px';
+            this.dom.style.left = position.left + 'px';
+        }
+    }
+
+    /** 
+     * Set the object size, also its DOM size
+     */
+    setDOMSize (size) {
+        this.size = size;
+        if (this.dom) {
+            this.dom.style.width = size.width + 'px';
+            this.dom.style.height = size.height + 'px';
+        }
     }
 
     /** 

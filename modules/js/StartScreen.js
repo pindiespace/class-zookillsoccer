@@ -20,20 +20,16 @@ export default class StartScreen extends Screen {
 	constructor (config) {
 		super(config);
 
-		// Load StartScreen sub-objects
-		this.loadBackground(
-			{
-				name: 'background',
-				domId: 'start-screen',
-				path: 'img/screens/start-screen.png',
-				author: '',
-				source: '',
-				callback: this.ready
-			} 
-		);
+		// this.dom defined in Screen
 
+		// Load StartScreen sub-objects
+		this.loadBackground('img/screens/start-screen.png');
+
+		// load identity image
 		this.loadIdentity();
-		//this.loadInstructions();
+
+		// load instructions
+		this.loadInstructions();
 
 		// Make the start button open the main game screen
 		this.bindStart();
@@ -46,13 +42,12 @@ export default class StartScreen extends Screen {
 				domId: 'start-screen-identity',
 				path: 'img/identity/logo.png', 
 				author: 'pete markiewicz', 
-				source: 'plyojump', 
-				callback: this.ready
+				source: 'plyojump'
 			}
 		);
 
 		// set position of Identity
-		this.identity.setPosition (
+		this.identity.setDOMPosition (
 			{
 				top: 0,
 				left: 0
@@ -66,18 +61,18 @@ export default class StartScreen extends Screen {
 		this.instructions = new StaticText(
 			{
 				name: 'game instructions',
-				text: 'play to win. That is all Trump cares about, and so should you'
+				domId: 'instructions',
+				text: 'Play to win. That is all Trump cares about, and so should you.'
 			}
 		);
 
-		this.instructions.setPosition(
+		this.instructions.setDOMPosition(
 			{
 				top: 0,
 				left: 0,
 			}
 		);
 
-		document.getElementById('instructions')
 	}
 
 	bindStart () {

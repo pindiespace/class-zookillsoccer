@@ -8,7 +8,6 @@
  import Image from './Image.js';
  import StaticImage from './Image.js';
  import Identity from './StaticImage.js';
- import Background from './Background.js';
 
  export default class Screen extends GamePiece {
 
@@ -19,40 +18,37 @@
  		this.game = config.game;
 
  		// Screens are defined in HTML, so save a reference to our DOM id
- 		this.screenId = config.id;
+ 		this.domId = config.id;
 
- 		// grab the HTML element corresponding to our screen
- 		this.loadScreen(config.id);
+ 		// save a reference to the DOM element we're connected to
+ 		this.dom = document.getElementById(this.domId);
 
  		// insert the copyright info from the main Game object
  		this.addWarning();
  	}
 
- 	loadScreen () {
- 		console.log("loading:" + this.screenId);
- 		this.dom = document.getElementById(this.screenId);
+ 	// load a background image into the Screen
+ 	loadBackground (path, callback) {
+ 		console.log("loading:" + this.domId);
+ 		this.backgroundImage = new StaticImage(
+ 			{
+ 				name: this.name + '-image',
+ 				domId: this.id + '-image',
+ 				path: path,
+ 				callback: callback
+ 			}
+ 		);
+ 		this.backgroundImage.loadBackgroundImage(this.dom, path, callback);
  	}
 
- 	loadBackground (config) {
- 		this.background = new Background(
-			{
-				name: config.name,
-				domId: config.domId,
-				path: config.path,
-				author: config.author,
-				source: config.source,
-				callback: config.callback
-			} 
-		);
- 	}
-
+ 	// show and hide regions of the Screen
  	showScreen () {
- 		console.log("showing:" + this.screenId);
+ 		console.log("showing:" + this.domId);
  		this.dom.style.display = "block";
  	}
 
  	hideScreen () {
- 		console.log("hiding:" + this.screenId);
+ 		console.log("hiding:" + this.domId);
  		this.dom.style.display = "none";
  	}
 

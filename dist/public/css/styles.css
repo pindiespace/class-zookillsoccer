@@ -16,7 +16,30 @@ body {
   display: none; }
 
 /* start-screen */
-/* game-screen */
+/* game-screen
+ * Note the technique used to keep the absolutely-positioned elements 
+ * from overflowing their enclosing parent HTML elements.
+ * #game-screen positioned relative
+ * Cage elements (dynamically added) positioned absolutely
+ * canvas element positioned absolutely, floated right
+ * #game-screen-arena (wraps the canvas and Cages inside #game-screen) has a clearfix
+ */
+#game-screen {
+  position: relative;
+  width: 976px;
+  height: 620px; }
+
+#game-screen canvas {
+  position: absolute;
+  float: right; }
+
+#game-screen-arena {
+  visibility: hidden;
+  display: block;
+  content: "";
+  clear: both;
+  height: 0; }
+
 /* end-screen */
 /* ======== style the game button ======== */
 /* Main Styles */

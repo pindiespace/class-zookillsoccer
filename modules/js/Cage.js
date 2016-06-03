@@ -9,7 +9,9 @@
  export default class Cage extends Area {
 
  	constructor (config) {
+
  		super(config);
+
  	}
 
  }

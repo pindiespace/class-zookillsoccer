@@ -11,6 +11,9 @@
  	constructor (config) {
  		super(config);
 
+ 		// load the background image
+ 		this.loadBackground('img/screens/end-screen.png');
+
  		// Load EndScreen sub-objects
  		this.loadInputScore();
  		this.loadHighScores();

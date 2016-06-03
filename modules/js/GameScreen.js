@@ -25,29 +25,93 @@
  		this.hideHeader();
  		this.hideFooter();
 
- 		// Load sub-objects
+ 		// load the background image
+ 		this.loadBackground('img/screens/game-screen.png');
+
+ 		// load sub-objects
  		this.cages   = this.loadCages();
  		this.animalArea = this.loadAnimalArea();
  		this.playerArea = this.loadPlayerArea();
 
  	}
 
- 	loadCages () {
+ 	loadCages (container, imgPath) {
  		// load 4 Cages
- 		this.cages.push(new Cage({name: 'Lion cage', position: {top: 0, left: 0}}));
-		this.cages.push(new Cage({name: 'Tiger cage', position: {top: 0, left: 100}}));
-		this.cages.push(new Cage({name: 'Bear cage', position: {top: 0, left: 200}}));
-		this.cages.push(new Cage({name: 'Gorilla cage', position: {top: 0, left: 300}}));
+ 		var path = 'img/areas/cage.png';
+ 		this.cages.push(
+ 			new Cage(
+ 				{
+ 					name: 'lion-cage', 
+ 					position: {top: 0, left: 70}, 
+ 					size: {width: 100, height:100}, 
+ 					container: this.dom, 
+ 					path: path
+ 				}
+ 			)
+ 		);
+		this.cages.push(
+			new Cage(
+				{
+					name: 'tiger-cage', 
+					position: {top: 0, left: 310}, 
+					size: {width: 100, height:100}, 
+					container: this.dom, 
+					path: path
+				}
+			)
+		);
+		this.cages.push(
+			new Cage(
+				{
+					name: 'bear-cage', 
+					position: {top: 0, left: 550}, 
+					size: {width: 100, height:100},
+					container: this.dom, 
+					path: path
+				}
+			)
+		);
+		this.cages.push(
+			new Cage(
+				{
+					name: 'gorilla-cage', 
+					position: {top: 0, left: 790}, 
+					size: {width: 100, height:100},
+					container: this.dom, 
+					path: path
+				}
+			)
+		);
  	}
 
  	loadAnimalArea () {
  		// load Animal movement area
- 		this.animalAreas.push(new AnimalArea({name: 'Zoo', position: {top: 100, left: 0}}));
+ 		this.animalAreas.push(
+ 			new AnimalArea(
+ 				{
+ 					name: 'Zoo', 
+ 					position: {top: 104, left: 0}, 
+ 					size: {width: 982, height: 422},
+ 					container: this.dom, 
+ 					path: null
+ 				}
+ 			)
+ 		);
  	}
 
  	loadPlayerArea () {
  		// load the Player
- 		this.playerAreas.push(new PlayerArea({name: 'Player Area', position: {top: 500, left: 0}}));
+ 		this.playerAreas.push(
+ 			new PlayerArea(
+ 				{
+ 					name: 'Player Area', 
+ 					position: {top: 528, left: 0}, 
+ 					size: {width: 982, height: 100},
+ 					container: this.dom, 
+ 					path: null
+ 				}
+ 			)
+ 		);
  	}
 
  }

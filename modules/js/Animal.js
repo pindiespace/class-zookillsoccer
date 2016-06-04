@@ -14,12 +14,6 @@
 
  	constructor (config) {
  		super (config);
-
- 		this.image = new StaticImage({name: 'Animal Image', path: config.path, callback: this.ready});
  	}
 
- 	// Function runs once StaticImage finishes loading the image
- 	ready () {
- 		console.log('Animal ready!');
- 	}
  }

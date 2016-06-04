@@ -28,8 +28,11 @@
  		// load the background image
  		this.loadBackground('img/screens/game-screen.png');
 
- 		// load sub-objects
- 		this.cages   = this.loadCages();
+ 		// get the section that has the canvas for overlay
+ 		var arena = document.getElementById('game-screen-arena');
+
+ 		// load sub-objects into the Arena
+ 		this.cages   = this.loadCages(arena, 'img/areas/cage.png');
  		this.animalArea = this.loadAnimalArea();
  		this.playerArea = this.loadPlayerArea();
 
@@ -37,15 +40,14 @@
 
  	loadCages (container, imgPath) {
  		// load 4 Cages
- 		var path = 'img/areas/cage.png';
  		this.cages.push(
  			new Cage(
  				{
  					name: 'lion-cage', 
  					position: {top: 0, left: 70}, 
  					size: {width: 100, height:100}, 
- 					container: this.dom, 
- 					path: path
+ 					container: container, 
+ 					path: imgPath
  				}
  			)
  		);
@@ -55,8 +57,8 @@
 					name: 'tiger-cage', 
 					position: {top: 0, left: 310}, 
 					size: {width: 100, height:100}, 
-					container: this.dom, 
-					path: path
+					container: container, 
+					path: imgPath
 				}
 			)
 		);
@@ -66,8 +68,8 @@
 					name: 'bear-cage', 
 					position: {top: 0, left: 550}, 
 					size: {width: 100, height:100},
-					container: this.dom, 
-					path: path
+					container: container, 
+					path: imgPath
 				}
 			)
 		);
@@ -77,8 +79,8 @@
 					name: 'gorilla-cage', 
 					position: {top: 0, left: 790}, 
 					size: {width: 100, height:100},
-					container: this.dom, 
-					path: path
+					container: container, 
+					path: imgPath
 				}
 			)
 		);
@@ -90,8 +92,8 @@
  			new AnimalArea(
  				{
  					name: 'Zoo', 
- 					position: {top: 104, left: 0}, 
- 					size: {width: 982, height: 422},
+ 					position: {top: 104, left: 6}, 
+ 					size: {width: 970, height: 410},
  					container: this.dom, 
  					path: null
  				}
@@ -105,8 +107,8 @@
  			new PlayerArea(
  				{
  					name: 'Player Area', 
- 					position: {top: 528, left: 0}, 
- 					size: {width: 982, height: 100},
+ 					position: {top: 514, left: 6}, 
+ 					size: {width: 970, height: 100},
  					container: this.dom, 
  					path: null
  				}

@@ -14,7 +14,7 @@ export default class Identity extends StaticImage {
 
 		this.setSource(config.source);
 		this.setAuthor(config.author);
-		this.loadImage(config.domId, config.path);
+		this.loadImageToDOM(config.domId, config.path);
 
 		//Hide any <h2> text equivalent of identity in this CSS box
 		var textIdentity = document.querySelector('#' + config.domId + ' h2');

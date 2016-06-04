@@ -11,7 +11,7 @@
 export default class GamePiece {
 
     constructor (config) {
-    	//TODO: use super();
+        //TODO: use super();
         this.name = config.name;
         this.uuid = this.setId();
         this.ready = true; // change to false for deferred loads

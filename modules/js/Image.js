@@ -27,19 +27,22 @@ export default class Image extends Info {
 		var img = document.createElement('img');
 		img.src = path;
 		img.onload = function () {
-			console.log('image loaded')
+			console.log(that.name + ' image loaded from:' + path + ' w:' + img.width + ' h:' + img.height)
 			that.setReady(true);
 			that.data = img;
-			that.path = path;
+			
 			if(callback) {
 				callback();
 			}
+		}
+		img.onerror = function (e) {
+			console.log('error loading img from:' + path);
 		}
 	}
 
 	// load image, append to existing DOM element
 	// NOTE: this is over-written in Character.js, which loads images into Canvas
-	loadImage (domId, path, callback) {
+	loadImageToDOM (domId, path, callback) {
 		var that = this;
 		this.load(path, function () {
 			console.log('foreground image ' + path + ' loaded')
@@ -54,7 +57,7 @@ export default class Image extends Info {
 	// load image as a CSS background image into existing DOM element. 
 	// NOTE: no local reference to image in this case
 	loadBackgroundImage (container, path, callback) {
-		console.log('loading background image')
+		console.log('loading background image:' + path)
 		container.style.backgroundImage='url(' + path + ')';
 		this.setReady(true);
 		if (callback) {

@@ -84,7 +84,6 @@ export default class Game extends GamePiece {
 	// get a reference to the HTML5 canvas context
 	loadCanvas () {
 		this.canvas = document.querySelector('#game-screen-arena canvas');
-		console.log("CANVASSSSSSS:" + this.canvas)
 		this.context = this.canvas.getContext("2d");
 	}
 
@@ -110,7 +109,7 @@ export default class Game extends GamePiece {
 			new Lion(
 				{
 					name: 'Lion', 
-					position: {top: 10, left: 25},
+					position: {top: 15, left: 94},
 					path: 'img/animals/lion.png',
 					game: this
 				}
@@ -120,7 +119,7 @@ export default class Game extends GamePiece {
 			new Tiger(
 				{
 					name: 'Tiger', 
-					position: {top: 10, left: 125},
+					position: {top: 15, left: 333},
 					path: 'img/animals/tiger.png',
 					game: this
 				}
@@ -129,7 +128,7 @@ export default class Game extends GamePiece {
 		this.displayCharacters.push(
 			new Bear(
 				{
-					name: 'Bear', position: {top: 10, left: 225},
+					name: 'Bear', position: {top: 15, left: 570},
 					path: 'img/animals/bear.png',
 					game: this
 				}
@@ -138,7 +137,7 @@ export default class Game extends GamePiece {
 		this.displayCharacters.push(
 			new Gorilla(
 				{
-					name: 'Gorilla', position: {top: 10, left: 325},
+					name: 'Gorilla', position: {top: 15, left: 812},
 					path: 'img/animals/gorilla.png',
 					game: this
 				}
@@ -215,7 +214,7 @@ export default class Game extends GamePiece {
 		var timeDiff = (this.endTime - this.startTime) / 1000;
 
 		// get seconds (Original had 'round' which incorrectly counts 0:28, 0:29, 1:30 ... 1:59, 1:0)
-		return Math.round(timeDiff % 60);		
+		return Math.round(timeDiff % 60);
 	}
 
 	checkIfComplete () {
@@ -255,18 +254,7 @@ export default class Game extends GamePiece {
 	draw () {
 
 		for (var i = 0, len = this.displayCharacters.length; i < len; i++) {
-
-			var character = this.displayCharacters[i];
-			if (character.image) {
-				var img = character.image.data;
-				//TODO: data not being used!!
-				if (img) {
-				// draw image into HTML5 canvas
- 		 		this.context.drawImage(img, 0, 0, img.width, img.height);
-				}
-
-			}
-
+			this.displayCharacters[i].draw(this.context);
 		}
 	}
 

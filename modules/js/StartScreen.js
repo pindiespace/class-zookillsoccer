@@ -6,14 +6,14 @@
 import GamePiece from './GamePiece.js';
 import Screen from './Screen.js';
 
- import Info from './Info.js';
- import Text from './Text.js';
- import StaticText from './StaticText.js';
+import Info from './Info.js';
+import Text from './Text.js';
+import StaticText from './StaticText.js';
 
- import Image from './Image.js';
- import StaticImage from './Image.js';
- import Identity from './Identity.js';
- import Background from './Background.js';
+import Image from './Image.js';
+import StaticImage from './Image.js';
+import Identity from './Identity.js';
+import Background from './Background.js';
 
 export default class StartScreen extends Screen {
 

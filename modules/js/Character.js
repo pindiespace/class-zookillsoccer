@@ -38,7 +38,9 @@
  	draw (context) {
 		if (this.image) {
 			var img = this.image.data;
-			console.log('drawing')
+ 			// >>>>>>>>>>>ADDED IN WEEK 11
+			//console.log('drawing')
+			// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 			if (img) {
 				// draw image into HTML5 canvas
  		 		context.drawImage(img, this.position.left, this.position.top);

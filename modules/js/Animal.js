@@ -10,21 +10,27 @@
  import Image from './Image.js';
  import StaticImage from './StaticImage.js';
 
- // ADDED IN WEEK 11
+ // >>>>>>>>>>>ADDED IN WEEK 11
  import Mover from './Mover.js';
  import Collider from './Collider.js';
- // END ADDED WEEK 11
+ // END ADDED WEEK 11<<<<<<<<<<<<<
 
  export default class Animal extends Character {
 
  	constructor (config) {
  		super (config);
 
- 		// ADDED IN WEEK 11
- 		this.mover = new Mover();
+ 		// >>>>>>>>>>>ADDED IN WEEK 11
+ 		this.mover = new Mover(this, 0.2, 'bottom');
  		this.collider = new Collider();
- 		// END ADDED IN WEEK 11
+ 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
  	}
+
+ 	// >>>>>>>>>>>ADDED IN WEEK 11
+ 	update () {
+ 		this.mover.randomWalk();
+ 	}
+ 	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
  }

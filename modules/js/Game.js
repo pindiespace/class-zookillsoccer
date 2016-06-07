@@ -253,6 +253,9 @@ export default class Game extends GamePiece {
 
 	draw () {
 
+ 		// >>>>>>>>>>>ADDED IN WEEK 11
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+ 		// END ADDED WEEK 11<<<<<<<<<<<<<
 		for (var i = 0, len = this.displayCharacters.length; i < len; i++) {
 			this.displayCharacters[i].draw(this.context);
 		}

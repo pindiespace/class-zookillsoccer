@@ -25,7 +25,8 @@
  	/** 
  	 * @method initSlider
  	 * @description slew object horizontally with keypresses
- 	 * @param deg the degrees to rotate the object 
+ 	 * @param deg the degrees to rotate the Player. 
+     * NOTE: we also grab the 'Trump' object.
  	 */
  	initSlew() {
         console.log('initing slew motion');
@@ -42,19 +43,13 @@
         this.bounds.bottom = this.bounds.top + this.bounds.height;
         this.bounds.right = this.bounds.left + this.bounds.width;
 
-        //we need a bottom and right for the Character as well
-        // we need a bottom and right for the Character as well
-        //this.obj.position.bottom = this.obj.position.top + this.obj.img.image.height;
-        //this.obj.position.right = this.obj.position.left + this.obj.img.image.width;
-
-
-        console.log('SLEW SIZEEEEE:' + this.obj.size)
         this.image = this.obj.image;
 
         // toggle the position of the Player when kicking
         this.unKick = this.obj.position.top;
         this.inKick = this.obj.position.top - 6;
 
+        // listen for user events
         document.addEventListener('keydown', 
             event => this.slew(event), false);
 
@@ -64,7 +59,8 @@
 
     /** 
      * @method initRandom
-     * @description init random motions along a path
+     * @description init random motions along a path. Used for 
+     * Animal characters moving through the AnimalArea.
      */
     initRandom (prefSpeed, direction) {
         console.log('init random motion');
@@ -85,16 +81,29 @@
         this.bounds.bottom = this.bounds.top + this.bounds.height;
         this.bounds.right = this.bounds.left + this.bounds.width;
 
-        // we need a bottom and right for the Character as well
-        console.log('RANDOM SIZEEEEE:' + this.obj.size)
+        // get bottom and right from Character from its Image
         this.image = this.obj.image;
-        //this.obj.position.bottom = this.obj.position.top + this.img.height;
-        //this.obj.position.right = this.obj.position.left + this.img.width;
     }
 
-    initPingPong () {
+    initPingPong (prefSpeed, collider) {
         console.log('init pingpong motion');
         this.type = this.PINGPONG;
+
+        //Animal area
+        // add bottom, right to make a Rect for the AnimalArea
+        this.bounds = this.game.screens['game-screen'].animalAreas[0].position;
+        this.bounds.width = this.game.screens['game-screen'].animalAreas[0].size.width;
+        this.bounds.height = this.game.screens['game-screen'].animalAreas[0].size.height;
+        this.bounds.bottom = this.bounds.top + this.bounds.height;
+        this.bounds.right = this.bounds.left + this.bounds.width;
+
+        // get bottom and right from Character from its Image
+        this.image = this.obj.image;
+
+        //FIND PLAYER - KLUDGE, BUT WILL WORK IF Player created BEFORE TRUMP
+        //KLUDGE
+        //TODO; this.game.characterArray[i]
+
     }
 
  	/** 
@@ -246,12 +255,20 @@
  		}
     }
 
+
     /** 
      * @method pingPong
-     * @description move in a ping-pong style
+     * @description move in a ping-pong style. This is specific to the game.
+     * 1. collision starts the character moving
+     * 2. they bounce on all walls EXCEPT the one they were closest to when collide with
+     * 3. when they intersect that wall, they stop
      */
-    pingPong () {
+    pingPong (collider) {
         
+    }
+
+    updatePingPong () {
+
     }
 
  } // end of class

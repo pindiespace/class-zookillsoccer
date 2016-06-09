@@ -12,8 +12,6 @@
         // Character has reference to Game
         this.game = gameObj.game;
 
-        //window.theGame = game;
-
         // Movement types
         this.type = 0;
         this.SLEW = 1;
@@ -85,7 +83,12 @@
         this.image = this.obj.image;
     }
 
-    initPingPong (prefSpeed, collider) {
+    /** 
+     * @method initPingPong
+     * @description have a Trump init.
+     * NOTE: collision potential added separately
+     */
+    initPingPong (prefSpeed, trump) {
         console.log('init pingpong motion');
         this.type = this.PINGPONG;
 
@@ -100,10 +103,9 @@
         // get bottom and right from Character from its Image
         this.image = this.obj.image;
 
-        //FIND PLAYER - KLUDGE, BUT WILL WORK IF Player created BEFORE TRUMP
-        //KLUDGE
-        //TODO; this.game.characterArray[i]
-
+        this.obj.speed = 0;
+        this.obj.dx = 0;
+        this.obj.dy = 0;
     }
 
  	/** 
@@ -175,8 +177,38 @@
      * @description if foot is near Trump, kick him into the Animal
      */
     kick (e) {
+        //console.log('::::THIS TRUMP:::::' + this.obj.trump)
         this.obj.position.top = this.inKick;
-    }
+
+
+        // see if we're close enough to kick in the y axis
+        var trumpYDist = this.obj.position.top - this.obj.trump.image.data.width - this.obj.trump.position.top;
+        //console.log('trumpYDist:' + trumpYDist)
+
+        // If Player is close in Y, and inside X range, kick the Trump into AnimalArea
+        if (trumpYDist < 10) {
+
+        // start the Trump moving, speed
+        this.obj.trump.speed = 5;
+
+            // compute dx and dy for Trump
+            var dist = (this.obj.position.left - this.obj.trump.position.left) / 50;
+            if (Math.abs(dist) < 1.0) {
+                var dx = dist;
+                if(dx > 0 && dx < 0.7) {
+                   this.obj.trump.dx = dx;
+                    this.obj.trump.dy = 1.0 - dx;
+                } else if (dx < 0 && dx > -0.7) {
+                   this.obj.trump.dx = dx;
+                    this.obj.trump.dy = 1.0 + dx;
+
+                } else {
+                    this.obj.trump.dx = 0;
+                    this.obj.trump.dy = 0;
+                }
+            }
+        }
+    } // end of function
 
     /** 
      * @method unkick
@@ -263,8 +295,18 @@
      * 2. they bounce on all walls EXCEPT the one they were closest to when collide with
      * 3. when they intersect that wall, they stop
      */
-    pingPong (collider) {
-        
+    pingPong () {
+        //console.log('dx:' + this.obj.dx + ' dy:' + this.obj.dy);
+        this.obj.position.left -= this.obj.speed * this.obj.dx;
+        this.obj.position.top -= this.obj.speed * this.obj.dy;
+
+        //TODO: check for collisions with AnimalArea and Animals.
+        //Let bounce 1 time off of bottom, but stop the second time
+
+    }
+
+    wasKicked () {
+
     }
 
     updatePingPong () {

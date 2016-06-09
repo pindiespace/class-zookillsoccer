@@ -16,6 +16,8 @@
  	constructor (config) {
  		super (config);
 
+ 		this.mover.initPingPong(0, this);
+
  	}
 
  	// >>>>>>>>>>>ADDED IN WEEK 11

@@ -39,6 +39,10 @@ import Cage from './Cage.js';
 import AnimalArea from './AnimalArea.js';
 import PlayerArea from './PlayerArea.js';
 
+// >>>>>>>>>>>ADDED IN WEEK 11
+import Collider from './Collider.js';
+// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+
 export default class Game extends GamePiece {
 
 	constructor (config) {
@@ -174,6 +178,11 @@ export default class Game extends GamePiece {
 		this.loadAnimals();
 		this.loadPlayers();
 		this.loadTrumps();
+
+		// >>>>>>>>>>>ADDED IN WEEK 11
+		this.collder = new Collider(this.displayCharacters);
+		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+
 
 		//make GameScreen visible
 

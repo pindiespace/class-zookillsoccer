@@ -15,20 +15,15 @@
 
  	constructor (config) {
  		super (config);
- 		// >>>>>>>>>>>ADDED IN WEEK 11
- 		this.mover = new Mover(this, 0.2);
- 		this.collider = new Collider();
- 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
  		// >>>>>>>>>>>ADDED IN WEEK 11
- 		this.mover.slider();
- 		//TODO: this not working
+ 		this.mover.initSlew();
   		// END ADDED IN WEEK 11<<<<<<<<<<<<<<		
  	}
 
   	// >>>>>>>>>>>ADDED IN WEEK 11
  	update () {
-
+ 		this.mover.updateSlew();
  	}
  	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 

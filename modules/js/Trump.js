@@ -16,10 +16,6 @@
  	constructor (config) {
  		super (config);
 
- 		// >>>>>>>>>>>ADDED IN WEEK 11
- 		this.mover = new Mover(this, 0.2, 'top');
- 		this.collider = new Collider();
- 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
  	}
 
  	// >>>>>>>>>>>ADDED IN WEEK 11

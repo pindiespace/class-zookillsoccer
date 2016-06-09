@@ -10,17 +10,30 @@
  import Image from './Image.js';
  import StaticImage from './StaticImage.js';
 
+ // >>>>>>>>>>>ADDED IN WEEK 11
+ import Mover from './Mover.js';
+ import Collider from './Collider.js';
+ // END ADDED WEEK 11<<<<<<<<<<<<<
+
  export default class Character extends GamePiece {
 
  	constructor (config) {
  		super (config);
 
+ 		 // store a reference to the game object
+ 		this.game = config.game;
+
  		// Set position and size from configuration
  		this.position = config.position;
  		this.size = config.size;
 
- 		// store a reference to the game object
- 		this.game = config.game;
+ 		window.theGame = config.game;
+
+ 		// >>>>>>>>>>>ADDED IN WEEK 11
+ 		this.mover = new Mover(this);
+ 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+
+
 
  		this.image = new StaticImage(
  			{

@@ -5,73 +5,182 @@
 
  export default class Mover {
 
- 	constructor (gameObj, prefSpeed,  direction) {
- 		this.newTop = 1, this.newLeft = 1, this.newBottom = 1, this.newRight = 1;
+ 	constructor (gameObj) {
+ 		//this.newTop = 1, this.newLeft = 1, this.newBottom = 1, this.newRight = 1;
  		this.obj = gameObj;
- 		this.speed = prefSpeed * this.timeStampRandom();
- 		this.delay = this.timeStampRandom() * 300;
- 		this.direction = direction;
- 		this.counter = 0;
- 		this.delayCounter = 0;
- 		this.MAX = 30;
- 		this.MAX_DELAY = 300;
 
- 		console.log("TIMESTAMP RANDOM:" + this.timeStampRandom());
- 		console.log("TIMESTAMP DELAY:" + this.delay)
+        // Character has reference to Game
+        this.game = gameObj.game;
+
+        //window.theGame = game;
+
+        // Movement types
+        this.type = 0;
+        this.SLEW = 1;
+        this.RANDOM = 2;
+        this.PINGPOING = 3;
+
  	}
 
  	/** 
- 	 * @method setOrigin
- 	 * @description set the starting position of the object
- 	 * @param Integer x the x coordinate of the object
- 	 * @param Integer y the y coordinate of the object
+ 	 * @method initSlider
+ 	 * @description slew object horizontally with keypresses
+ 	 * @param deg the degrees to rotate the object 
  	 */
- 	setOrigin (x, y) {
- 		this.obj.position.left = x;
- 		this.obj.position.top = y;
+ 	initSlew() {
+        console.log('initing slew motion');
+        this.type = this.SLEW;
+
+        this.speed = 0;
+        this.ticker = 0;
+        this.lastDir = 1;
+
+        // add bottom, right to make a Rect for the PlayerArea
+        this.bounds = this.game.screens['game-screen'].playerAreas[0].position;
+        this.bounds.width = this.game.screens['game-screen'].playerAreas[0].size.width;
+        this.bounds.height = this.game.screens['game-screen'].playerAreas[0].size.height;
+        this.bounds.bottom = this.bounds.top + this.bounds.height;
+        this.bounds.right = this.bounds.left + this.bounds.width;
+
+        //we need a bottom and right for the Character as well
+        // we need a bottom and right for the Character as well
+        //this.obj.position.bottom = this.obj.position.top + this.obj.img.image.height;
+        //this.obj.position.right = this.obj.position.left + this.obj.img.image.width;
+
+
+        console.log('SLEW SIZEEEEE:' + this.obj.size)
+        this.image = this.obj.image;
+
+        // toggle the position of the Player when kicking
+        this.unKick = this.obj.position.top;
+        this.inKick = this.obj.position.top - 6;
+
+        document.addEventListener('keydown', 
+            event => this.slew(event), false);
+
+        document.addEventListener('keyup',
+            event => this.unkick(event), false);
  	}
 
- 	/** 
- 	 * @method slider
- 	 * @description slew object horizontally
- 	 * @param deg the degrees to rotate the object
- 	 */
- 	slider (deg) {
- 		console.log('setting slider')
- 		this.obj.keydown = function (e) {
-    		console.log(e.keyCode);
-    		switch(e.keyCode) {
-    			case 37:  //left
-    				this.obj.position.left -= 1;
-    				break;
-    			case 38:    //up
-    				break;
-    			case 39: //right
-    				this.obj.position.right += 1;
-    				break;
-    			case 40:  //down
-    			default:
-    				break;
-    		}
+    /** 
+     * @method initRandom
+     * @description init random motions along a path
+     */
+    initRandom (prefSpeed, direction) {
+        console.log('init random motion');
+        this.type = this.RANDOM;
 
- 		}
- 	}
+        this.speed = prefSpeed * this.timeStampRandom();
+        this.delay = this.timeStampRandom() * 300;
+        this.direction = direction;
+        this.counter = 0;
+        this.delayCounter = 0;
+        this.MAX = 30;
+        this.MAX_DELAY = 300;
+
+        // add bottom, right to make a Rect for the AnimalArea
+        this.bounds = this.game.screens['game-screen'].animalAreas[0].position;
+        this.bounds.width = this.game.screens['game-screen'].animalAreas[0].size.width;
+        this.bounds.height = this.game.screens['game-screen'].animalAreas[0].size.height;
+        this.bounds.bottom = this.bounds.top + this.bounds.height;
+        this.bounds.right = this.bounds.left + this.bounds.width;
+
+        // we need a bottom and right for the Character as well
+        console.log('RANDOM SIZEEEEE:' + this.obj.size)
+        this.image = this.obj.image;
+        //this.obj.position.bottom = this.obj.position.top + this.img.height;
+        //this.obj.position.right = this.obj.position.left + this.img.width;
+    }
+
+    initPingPong () {
+        console.log('init pingpong motion');
+        this.type = this.PINGPONG;
+    }
 
  	/** 
- 	 * @method kicker 
+ 	 * @method slew 
  	 * Move object slightly up for duration of space bar down
- 	 */
- 	kicker () {
-
+     * Callback for keydown addEventListener
+     * @param Event e the keydown event
+     */
+ 	slew (e) {
+        switch (e.keyCode) {
+            case 32:
+            case 38:
+                this.kick(e);
+                e.preventDefault(); //prevent scroll
+                break;
+            case 37:
+                this.speed++;
+                this.ticker = 0;
+                this.obj.position.left -= this.speed;
+                this.lastDir = -1;
+                e.preventDefault(); //prevent scroll
+                break;
+            case 39:
+                this.speed++;
+                this.ticker = 0;
+                this.obj.position.left += this.speed;
+                this.lastDir = 1;
+                e.preventDefault(); //prevent scroll
+                break;
+            default:
+                break;
+        }
  	}
 
- 	/** 
- 	 * @method pingPong
- 	 * @description move in a ping-pong style
- 	 */
- 	pingPong () {
- 		
- 	}
+    /** 
+     * @method updateSlew
+     * @description provide simple easing motion, also, bounce 
+     * off walls.
+     */
+    updateSlew () {
+        this.ticker++;
+        if (this.speed > 0) {
+            if (this.ticker > 10) {
+                this.speed /= 2;
+                if (this.speed < 1) {
+                    this.speed = 0;
+                }
+            }
+        }
+        this.obj.position.left += (this.lastDir * this.speed);
+
+        //check bounds
+        if (this.bounds) {
+            if (this.image.data) {
+                var w = this.image.data.width;
+                if (this.obj.position.left < this.bounds.left) {
+                    this.lastDir = 1;
+                    this.obj.position.left = this.bounds.left + (this.speed * 1.5);
+                } else if (this.obj.position.left > this.bounds.right - w) {
+                    this.lastDir = -1;
+                    this.obj.position.left = this.bounds.right - w - (this.speed * 1.5);
+                }
+            }
+        }
+    }
+
+    /** 
+     * @method kick
+     * @description if foot is near Trump, kick him into the Animal
+     */
+    kick (e) {
+        this.obj.position.top = this.inKick;
+    }
+
+    /** 
+     * @method unkick
+     * @description set position of Player back to original
+     */
+    unkick (e) {
+        switch (e.keyCode) {
+            case 32:
+            case 38:
+                this.obj.position.top = this.unKick;
+                break;
+        }
+    }
 
  	timeStampRandom () {
  		var d = new Date().getTime();
@@ -84,7 +193,6 @@
             return (c=='x' ? r : (r&0x3|0x8)).toString(10);
         });
       return num / 10000;
-
  	}
 
  	/**
@@ -97,11 +205,11 @@
 
 
  	/** 
- 	 * @method randomWalk
+ 	 * @method updateRandomWalk
  	 * @description generate random walk, with one preferred direction, 
  	 * used by Animals
  	 */
- 	randomWalk () {
+ 	updateRandomWalk () {
  		this.counter++;
  		this.delayCounter++;
  		if (this.delayCounter < this.delay) {
@@ -136,8 +244,14 @@
  				console.error('Mover.setPrefDirection: invalid direction:' + this.direction);
  				break;
  		}
-		
     }
 
+    /** 
+     * @method pingPong
+     * @description move in a ping-pong style
+     */
+    pingPong () {
+        
+    }
 
- }
+ } // end of class

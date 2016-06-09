@@ -21,15 +21,15 @@
  		super (config);
 
  		// >>>>>>>>>>>ADDED IN WEEK 11
- 		this.mover = new Mover(this, 0.2, 'bottom');
- 		this.collider = new Collider();
+ 		// Animals get RANDOM MOTION
+ 		this.mover.initRandom(0.2, 'bottom');
  		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
  	}
 
  	// >>>>>>>>>>>ADDED IN WEEK 11
  	update () {
- 		this.mover.randomWalk();
+ 		this.mover.updateRandomWalk();
  	}
  	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 

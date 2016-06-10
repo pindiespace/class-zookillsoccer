@@ -183,7 +183,6 @@ export default class Game extends GamePiece {
 		this.collder = new Collider(this.displayCharacters);
 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
-
 		//make GameScreen visible
 
 		// initialize elapsed time

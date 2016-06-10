@@ -20,13 +20,25 @@
 
  	}
 
+    /** 
+     * @method truncate
+     * @description truncate (not round) number to fixed number of decimals
+     * @param Number num floating-point number
+     * @param Integer decimals the number of decimals points to round to
+     * @returns Number the truncated number
+     */
+    truncator (num, decimals) {    
+        var numPower = Math.pow(10, decimals); // "numPowerConverter" might be better
+        return ~~(num * numPower)/numPower;
+    }
+
  	/** 
  	 * @method initSlider
  	 * @description slew object horizontally with keypresses
  	 * @param deg the degrees to rotate the Player. 
      * NOTE: we also grab the 'Trump' object.
  	 */
- 	initSlew() {
+ 	initSlew () {
         console.log('initing slew motion');
         this.type = this.SLEW;
 
@@ -46,6 +58,8 @@
         // toggle the position of the Player when kicking
         this.unKick = this.obj.position.top;
         this.inKick = this.obj.position.top - 6;
+
+        // NOTE: Trump is added to Player in Collider
 
         // listen for user events
         document.addEventListener('keydown', 
@@ -100,12 +114,17 @@
         this.bounds.bottom = this.bounds.top + this.bounds.height;
         this.bounds.right = this.bounds.left + this.bounds.width;
 
+        this.obj.startTop = this.obj.position.top;
+
         // get bottom and right from Character from its Image
         this.image = this.obj.image;
 
         this.obj.speed = 0;
         this.obj.dx = 0;
         this.obj.dy = 0;
+
+        // NOTE: Animals and Players are added to Trump in Collider
+
     }
 
  	/** 
@@ -189,7 +208,9 @@
         if (trumpYDist < 10) {
 
         // start the Trump moving, speed
-        this.obj.trump.speed = 5;
+        this.obj.trump.speed = 40;
+
+        // TODO: ADD EDGE CASE WHERE TRUMP IN BOTTOM-LEFT, BOUNCE TO RIGHT
 
             // compute dx and dy for Trump
             var dist = (this.obj.position.left - this.obj.trump.position.left) / 50;
@@ -200,6 +221,14 @@
                     this.obj.trump.dy = 1.0 - dx;
                 } else if (dx < 0 && dx > -0.7) {
                    this.obj.trump.dx = dx;
+                    this.obj.trump.dy = 1.0 + dx;
+
+                } else if (dx == 0) {
+                    // slight randomization of dx
+                    var d = performance.now();
+                    (d = parseInt(d) - d);
+                    d = this.truncator(d, 2) / 10;
+                    this.obj.trump.dx = d;
                     this.obj.trump.dy = 1.0 + dx;
 
                 } else {
@@ -248,7 +277,10 @@
  	/** 
  	 * @method updateRandomWalk
  	 * @description generate random walk, with one preferred direction, 
- 	 * used by Animals
+ 	 * used by Animals.
+     * this.direction is the overall path the Animal is following to one of the 
+     * four walls of the AnimalArea. If it is 'return' it has collided with a Trump
+     * and is returning to its cage.
  	 */
  	updateRandomWalk () {
  		this.counter++;
@@ -257,6 +289,11 @@
  			//console.log('delayCounter:' + this.delayCounter + ' MAX:' + this.MAX_DELAY);
  			return;
  		}
+
+        // compute dx and dy from random walk. store initial position
+        var oldLeft = this.obj.position.left;
+        var oldTop = this.obj.position.top;
+
  		switch (this.direction) {
  			case 'top':
  				this.obj.position.top -= (this.speed + (0.1 * this.getRandom(1, this.speed)));
@@ -272,7 +309,7 @@
  					this.newLeft = (this.getRandom(-this.speed, this.speed));
  					this.counter = 0;
  				} else if (this.counter > this.MAX / 2) {
- 					this.speed += this.timeStampRandom() / 50;
+ 					this.speed += this.timeStampRandom() / 120;
  				}
 			 	this.obj.position.top += this.speed;
  				this.obj.position.left += this.newLeft;
@@ -281,12 +318,55 @@
  				this.obj.position.left += (this.speed + (0.1 * this.getRandom(1, this.speed)));
  				this.obj.position.top += 10 * (this.getRandom(-this.speed, this.speed));
  				break;
- 			default:
+ 			case 'return':
+                // TODO: return Animal to its cage
+                break;
+            case 'caged':
+                // TODO: when caged, reset until it is uncaged again
+                break;
+            default:
  				console.error('Mover.setPrefDirection: invalid direction:' + this.direction);
  				break;
  		}
+
+        var xdist = oldLeft - this.obj.position.left;
+        var ydist = oldTop - this.obj.position.top;
+        var sum = xdist + ydist;
+        this.obj.dx = xdist / sum;
+        this.obj.dy = ydist / sum;
+
     }
 
+    /**
+     * @method boxCollision
+     * detect intersection of two rectangles, and 
+     * rebound according to angle of collision
+     * @link https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+     * @link http://gamedevelopment.tutsplus.com/tutorials/when-worlds-collide-simulating-circle-circle-collisions--gamedev-769
+     */
+     calculateNewVelocities(firstBall, secondBall) {
+
+        //reverse dx and dy between objects
+        //var newVelX2 = -firstBall.dx;
+        //var newVelY2 = -firstBall.dy;
+ 
+        //var newVelX1 = -secondBall.dx;
+        //var newVelY1 = -secondBall.dy;
+
+        console.log('firstBall.dx:' + firstBall.dx + ' secondBall.dx:' + secondBall.dx);
+
+        //firstBall.dx = newVelX1;
+        //firstBall.dy = newVelY1;
+
+        //secondBall.dx = newVelX2;
+        //secondBall.dy = newVelY2;
+
+        //firstBall.position.left += newVelX1;
+        //firstBall.position.top += newVelY1;
+
+        //secondBall.position.left += newVelX2;
+        //secondBall.position.top += newVelY2;
+    }
 
     /** 
      * @method pingPong
@@ -300,7 +380,60 @@
         this.obj.position.left -= this.obj.speed * this.obj.dx;
         this.obj.position.top -= this.obj.speed * this.obj.dy;
 
-        //TODO: check for collisions with AnimalArea and Animals.
+        //check bounds (AnimalArea)
+        if (this.bounds) {
+            if (this.obj.image.data) {
+
+                var w = this.obj.image.data.width;
+                var h = this.obj.image.data.height;
+
+                // run this only if we are moving down the screen
+                if (this.obj.dy < 0) {
+                    if (this.obj.position.top > (this.obj.startTop - (this.obj.dy * this.obj.speed))) {
+                        //this.obj.dy = -this.obj.dy;
+                        this.obj.position.top = this.obj.startTop;
+                        this.obj.dx = 0;
+                        this.obj.dy = 0;
+                    }
+                    var dist = this.bounds.bottom - h - this.obj.position.top;
+                    var spd = -this.obj.dy * this.obj.speed * 4;
+                   ////////console.log('dist:' + dist + ' spd:' + spd)
+                
+                    // decelerate before stopping at bottom of AnimalArea
+                    if (dist < spd && spd > 2) {
+                        this.obj.speed /= 2;
+                    }
+                } //end of dy negative (going down)
+
+                // bounce on the other 3 walls
+                if (this.obj.position.left < this.bounds.left) {
+                    this.obj.dx = -this.obj.dx;
+                }
+                if (this.obj.position.top < this.bounds.top) {
+                    this.obj.dy = -this.obj.dy;
+                }
+                if (this.obj.position.left > this.bounds.right - w) {
+                    this.obj.dx = -this.obj.dx;
+                }
+
+                // If we encounder an animal, bounce, AND 'kick' the animal back into its cage
+                if (this.obj.animals) {
+                    for (var i = 0, len = this.obj.animals.length; i < len; i++) {
+                        var animal = this.obj.animals[i];
+                        var aw = animal.image.data.width;
+                        var ah = animal.image.data.height;
+
+                        if (this.obj.position.left < animal.position.left + aw &&
+                            this.obj.position.left + w > animal.position.left &&
+                            this.obj.position.top < animal.position.top + ah &&
+                            this.obj.position.top + h > animal.position.top) {                           
+                                this.calculateNewVelocities(this.obj, animal);
+                            }
+                    }
+                }
+
+            }
+        }
         //Let bounce 1 time off of bottom, but stop the second time
 
     }

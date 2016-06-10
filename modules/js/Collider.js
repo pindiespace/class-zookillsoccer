@@ -1,7 +1,8 @@
 /** 
  * @class Collider
- * @description detect collisions between specific objects in the 
- * game framework. It is NOT a general-purpose collision detector.
+ * @description create the collision matrix defining which objects can collide 
+ * with which objects. Objects that can collide have their potential colliders 
+ * added as references, e.g. Player.trump or Trump.player.
  */
 
  export default class Collider {
@@ -16,7 +17,7 @@
  		for (var i = 0, len = this.characterArray.length; i < len; i++) {
  			switch (this.characterArray[i].constructor.name) {
  				case 'Lion':
- 				case 'Tier':
+ 				case 'Tiger':
  				case 'Bear':
  				case 'Gorilla':
  					this.animalArray.push(this.characterArray[i]);

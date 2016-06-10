@@ -22,7 +22,7 @@
 
  		// >>>>>>>>>>>ADDED IN WEEK 11
  		// Animals get RANDOM MOTION
- 		this.mover.initRandom(0.2, 'bottom');
+ 		this.mover.initRandom(0.02, 'bottom');
  		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
  	}

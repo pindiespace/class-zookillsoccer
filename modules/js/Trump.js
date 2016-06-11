@@ -22,7 +22,7 @@
 
  	// >>>>>>>>>>>ADDED IN WEEK 11
  	update () {
- 		this.mover.pingPong();
+ 		this.mover.updatePingPong();
  	}
  	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 

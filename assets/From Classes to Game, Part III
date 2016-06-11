@@ -13,3 +13,35 @@ Import the Mover and Collider Classes into Animal
  	this.collider = new Collider();
  	
  }
+
+
+
+======================================
+TODO:
+CONVERT AFTER COURSE ENDS
+======================================
+
+Classes
+Add Image, StaticImage, DynamicImage
+
+
+CSS styles
+Build page with CSS responsive separately
+
+Player
+center Player at start
+
+Trump
+randomize Trump position at start
+
+Game
+do object-specific clear, instead of global canvas clear
+
+Movers
+Movement types should be part of individual classes, not generic mover
+Random walk adjustment
+Consistent signs for dx, dy, negative now when they should be positive
+
+
+
+

@@ -3,11 +3,10 @@
  * @description update position of object being animated by Game.
  */
 
- export default class Mover {
+export default class Mover {
 
- 	constructor (gameObj) {
- 		//this.newTop = 1, this.newLeft = 1, this.newBottom = 1, this.newRight = 1;
- 		this.obj = gameObj;
+	constructor (gameObj) {
+		this.obj = gameObj;
 
         // Character has reference to Game
         this.game = gameObj.game;
@@ -18,7 +17,7 @@
         this.RANDOM = 2;
         this.PINGPOING = 3;
 
- 	}
+	}
 
     /** 
      * @method truncate
@@ -53,13 +52,13 @@
         }
     }
 
- 	/** 
- 	 * @method initSlider
- 	 * @description slew object horizontally with keypresses
- 	 * @param deg the degrees to rotate the Player. 
+	/** 
+	 * @method initSlider
+	 * @description slew object horizontally with keypresses
+	 * @param deg the degrees to rotate the Player. 
      * NOTE: we also grab the 'Trump' object.
- 	 */
- 	initSlew () {
+	 */
+	initSlew () {
         console.log('initing slew motion');
         this.type = this.SLEW;
 
@@ -88,7 +87,7 @@
 
         document.addEventListener('keyup',
             event => this.unkick(event), false);
- 	}
+	}
 
     /** 
      * @method initRandom
@@ -101,7 +100,7 @@
 
         this.speed = prefSpeed * this.timeStampRandom();
         this.delay = this.timeStampRandom() * 300;
-        this.direction = direction;
+        this.obj.direction = direction;
         this.counter = 0;
         this.delayCounter = 0;
         this.MAX = 30;
@@ -113,6 +112,14 @@
         this.bounds.height = this.game.screens['game-screen'].animalAreas[0].size.height;
         this.bounds.bottom = this.bounds.top + this.bounds.height;
         this.bounds.right = this.bounds.left + this.bounds.width;
+
+
+        // remember where we started (in the cage)
+        this.startTop = this.obj.position.top;
+        this.startLeft = this.obj.position.left;
+
+        // cache position during new random moves
+        this.newTop = 0, this.newLeft = 0;
 
         // get bottom and right from Character from its Image
         this.image = this.obj.image;
@@ -148,13 +155,13 @@
 
     }
 
- 	/** 
- 	 * @method slew 
- 	 * Move object slightly up for duration of space bar down
+	/** 
+	 * @method slew 
+	 * Move object slightly up for duration of space bar down
      * Callback for keydown addEventListener
      * @param Event e the keydown event
      */
- 	slew (e) {
+	slew (e) {
         switch (e.keyCode) {
             case 32:
             case 38:
@@ -178,7 +185,7 @@
             default:
                 break;
         }
- 	}
+	}
 
     /** 
      * @method updateSlew
@@ -245,20 +252,17 @@
             var dist = (this.obj.position.left - this.obj.trump.position.left) / 50;
             if (Math.abs(dist) < 1.0) {
                 var dx = dist;
-                if(dx > 0 && dx < 0.7) {
+                if(dx > 0.003 && dx < 0.8) {
                    this.obj.trump.dx = dx;
                     this.obj.trump.dy = 1.0 - dx;
-                } else if (dx < 0 && dx > -0.7) {
+                } else if (dx < 0 && dx > -0.8) {
                    this.obj.trump.dx = dx;
                     this.obj.trump.dy = 1.0 + dx;
-
-                } else if (dx < 0.003) {
+                } else if (Math.abs(dx) < 0.003) {
                     var d = this.randomizer();
                     d = d - this.randomizer();
-
                     this.obj.trump.dx = d;
                     this.obj.trump.dy = 1.0 + dx;
-
                 } else {
                     this.obj.trump.dx = 0;
                     this.obj.trump.dy = 0;
@@ -285,8 +289,8 @@
      * @method timeStampRandom
      * @description randomize in a 10-fold range using window.performance
      */
- 	timeStampRandom () {
- 		var d = new Date().getTime();
+	timeStampRandom () {
+		var d = new Date().getTime();
         if (window.performance && typeof window.performance.now === "function") {
             d += performance.now(); //use high-precision timer if available
         }
@@ -296,76 +300,79 @@
             return (c=='x' ? r : (r&0x3|0x8)).toString(10);
         });
       return num / 10000;
- 	}
+	}
 
- 	/**
+	/**
 	 * Returns a random number between min (inclusive) and max (exclusive)
 	 * @link 
 	 */
 	getRandom(min, max) {
-    	return Math.floor(Math.random() * (max - min + 1)) + min;
+   	return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
- 	/** 
- 	 * @method updateRandomWalk
- 	 * @description generate random walk, with one preferred direction, 
- 	 * used by Animals.
-     * this.direction is the overall path the Animal is following to one of the 
+	/** 
+	 * @method updateRandomWalk
+	 * @description generate random walk, with one preferred direction, 
+	 * used by Animals.
+     * this.obj.direction is the overall path the Animal is following to one of the 
      * four walls of the AnimalArea. If it is 'return' it has collided with a Trump
      * and is returning to its cage.
- 	 */
- 	updateRandomWalk () {
- 		this.counter++;
- 		this.delayCounter++;
- 		if (this.delayCounter < this.delay) {
- 			//console.log('delayCounter:' + this.delayCounter + ' MAX:' + this.MAX_DELAY);
- 			return;
- 		}
+	 */
+	updateRandomWalk () {
+		this.counter++;
+		this.delayCounter++;
+		if (this.delayCounter < this.delay) {
+			//console.log('delayCounter:' + this.delayCounter + ' MAX:' + this.MAX_DELAY);
+			return;
+		}
 
         // compute dx and dy from random walk. store initial position
         this.oldLeft = this.obj.position.left;
         this.oldTop = this.obj.position.top;
 
- 		switch (this.direction) {
- 			case 'top':
- 				this.obj.position.top -= (this.speed + (0.1 * this.getRandom(1, this.speed)));
- 				this.obj.position.left += 10 * (this.getRandom(-this.speed, this.speed));
-                if(isNaN(this.obj.position.left)) {
-                    //TODO: FIGURE OUT WHAT IS BEING COMPUTED AS NAN FOR THIS!!!!!
-                    //TODO: ADD ANIMAL REBOUNT TO HOME CAGE
-                    //TODO: ADD ANIMAL STAYS IN CAGE
-                    //TODO: ANIMALS "roll" AROUND STATIONARY TRUMP
-                }
- 				break;
- 			case 'left':
- 				this.obj.position.left -= (this.speed + (0.1 * this.getRandom(1, this.speed)));
- 				this.obj.position.top +=  10 *(this.getRandom(-this.speed, this.speed));
- 				break;
- 			case 'bottom':
-  				if (this.counter > this.MAX) {
-  					this.MAX = parseInt(4, 30);
- 					this.newLeft = (this.getRandom(-this.speed, this.speed));
- 					this.counter = 0;
- 				} else if (this.counter > this.MAX / 2) {
- 					this.speed += this.timeStampRandom() / 120;
- 				}
-			 	this.obj.position.top += this.speed;
- 				this.obj.position.left += this.newLeft;
- 				break;
- 			case 'right':
- 				this.obj.position.left += (this.speed + (0.1 * this.getRandom(1, this.speed)));
- 				this.obj.position.top += 10 * (this.getRandom(-this.speed, this.speed));
- 				break;
- 			case 'return':
+		switch (this.obj.direction) {
+			case 'top':
+				this.obj.position.top -= (this.speed + (0.1 * this.getRandom(1, this.speed)));
+				this.obj.position.left -= 10 * (this.getRandom(-this.speed, this.speed/2));
+				break;
+			case 'left':
+				this.obj.position.left -= (this.speed + (0.5 * this.getRandom(0, this.speed)));
+				this.obj.position.top += 10 *(this.getRandom(-this.speed, this.speed));
+				break;
+			case 'bottom':
+ 				if (this.counter > this.MAX) {
+ 					//////this.MAX =4;
+                    this.MAX = this.getRandom(2, 15);
+                    //console.log("THIS MAX:" + this.MAX)
+					this.newLeft = (this.getRandom(-this.speed, this.speed));
+					this.counter = 0;
+				} else if (this.counter > this.MAX / 2) {
+					//this.speed += this.timeStampRandom() / 240;
+                    this.speed = this.getRandom(-0.2, 1)
+				}
+				this.obj.position.top += this.speed;
+                var r = this.getRandom(-1, 1);
+				this.obj.position.left -= r * this.newLeft;
+				break;
+			case 'right':
+				this.obj.position.left += (this.speed + (0.5 * this.getRandom(0, this.speed)));
+				this.obj.position.top += 10 * (this.getRandom(-this.speed, this.speed));
+				break;
+			case 'return':
+                // This is caused by a Trump collider running into the Animal
                 // TODO: return Animal to its cage
+                this.obj.direction = 'caged';
+                // TODO: write return arc
                 break;
             case 'caged':
+                this.obj.position.left = this.startLeft;
+                this.obj.position.top = this.startTop;
                 // TODO: when caged, reset until it is uncaged again
                 break;
             default:
- 				console.error('Mover.setPrefDirection: invalid direction:' + this.direction);
- 				break;
- 		}
+				console.error('Mover.setPrefDirection: invalid direction:' + this.obj.direction);
+				break;
+		}
 
         // Compute dx and dy for Animals
         var xdist = this.oldLeft - this.obj.position.left;
@@ -412,32 +419,32 @@
                 // Trump doesn't react if not moving (even if animal does)
                 if (trump.speed != 0 && trump.dx != 0 && trump.dy != 0) {
 
-                // move object so it isn't colliding anymore
-                if (cXDiff >= 0) {
-                    trump.position.x += (cXDiff + 1);
-                } else {
-                    trump.position.x -= (cXDiff + 1);
-                }
-
-                if (cYDiff >= 0) {
-                    trump.position.y += (cYDiff + 1);
-                } else {
-                    trump.position.y -= (cYDiff + 1);
-                }
-
-                // normalize new vectors
-                trump.dx = -cXDiff / cYDiff;
-                trump.dy = -cYDiff / cXDiff;
-
-                // rounding error
-                var ddif = Math.abs(trump.dx + trump.dy);
-                if (ddif > 1.0) {
-                    if (trump.dx >= 0) {
-                        trump.dy -= ddif;
+                    // move object so it isn't colliding anymore
+                    if (cXDiff >= 0) {
+                        trump.position.x += (cXDiff + 1);
                     } else {
-                        trump.dy += ddif;
+                        trump.position.x -= (cXDiff + 1);
                     }
-                }
+
+                    if (cYDiff >= 0) {
+                        trump.position.y += (cYDiff + 1);
+                    } else {
+                        trump.position.y -= (cYDiff + 1);
+                    }
+
+                    // normalize new vectors
+                    trump.dx = -cXDiff / cYDiff;
+                    trump.dy = -cYDiff / cXDiff;
+
+                    // rounding error
+                    var ddif = Math.abs(trump.dx + trump.dy);
+                    if (ddif > 1.0) {
+                        if (trump.dx >= 0) {
+                            trump.dy -= ddif;
+                        } else {
+                            trump.dy += ddif;
+                        }
+                    }
                 } //end of Trump is moving
                 //console.log('dx::::::' + trump.dx + ' dy::::::' + trump.dy)
 
@@ -454,7 +461,7 @@
      * 2. they bounce on all walls EXCEPT the one they were closest to when collide with
      * 3. when they intersect that wall, they stop
      */
-    pingPong () {
+    updatePingPong () {
         //console.log('dx:' + this.obj.dx + ' dy:' + this.obj.dy);
         this.obj.position.left -= this.obj.speed * this.obj.dx;
         this.obj.position.top -= this.obj.speed * this.obj.dy;
@@ -466,6 +473,14 @@
                 var w = this.obj.image.data.width;
                 var h = this.obj.image.data.height;
 
+                // catch cases where Trump gets into the Cage area
+                if (this.obj.position.top < this.bounds.top) {
+                    if (this.obj.dy > 0) {
+                        this.obj.dy = -this.obj.dy;
+                    } 
+                    this.obj.position.top = this.bounds.top + 1;
+                }
+
                 // run this only if we are moving down the screen
                 if (this.obj.dy < 0) {
                     if (this.obj.position.top > (this.obj.startTop - (this.obj.dy * this.obj.speed))) {
@@ -476,7 +491,6 @@
                     }
                     var dist = this.bounds.bottom - h - this.obj.position.top;
                     var spd = -this.obj.dy * this.obj.speed * 4;
-                   ////////console.log('dist:' + dist + ' spd:' + spd)
                 
                     // decelerate before stopping at bottom of AnimalArea
                     if (dist < spd && spd > 2) {
@@ -502,18 +516,14 @@
                         
                         if (this.calculateCollision(this.obj, animal)) {
                             //set the Animal's state to return home
-                        }
-                        /*
-                        if (this.obj.position.left < animal.position.left + aw &&
-                            this.obj.position.left + w > animal.position.left &&
-                            this.obj.position.top < animal.position.top + ah &&
-                            this.obj.position.top + h > animal.position.top) {                           
-                                this.calculateNewVelocities(this.obj, animal);
+                            console.log('>>>RETURNING ANIMAL TO CAGE')
+                            animal.direction = 'return';
+                            if (this.obj.speed < 2) {
+                                this.obj.speed = 2; /////////////////////////////
                             }
-                        */
+                        }
                     }
                 }
-
             }
         }
 
@@ -525,4 +535,4 @@
 
     }
 
- } // end of class
+} // end of class

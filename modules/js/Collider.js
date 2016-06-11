@@ -38,5 +38,9 @@
  		this.trump.animals = this.animalArray;
  		this.player.trump = this.trump;
 
+ 		//DEBUG
+ 		window.animals = this.trump.animals;
+ 		
+
  	}
  }

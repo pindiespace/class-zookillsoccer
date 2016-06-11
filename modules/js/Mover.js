@@ -32,6 +32,27 @@
         return ~~(num * numPower)/numPower;
     }
 
+    /** 
+     * @method randomizer
+     * @description randomize a number
+     */
+    randomizer () {
+        var d = performance.now();
+        (d = parseInt(d) - d);
+        d = this.truncator(d, 2) / 10;
+        return d;
+    }
+
+    /** 
+     * @method getCenter
+     */
+    getCenter (x, y, width, height) {
+        return {
+            x: x + (width/2),
+            y: y + (height/2)
+        }
+    }
+
  	/** 
  	 * @method initSlider
  	 * @description slew object horizontally with keypresses
@@ -182,9 +203,11 @@
                 var w = this.image.data.width;
                 if (this.obj.position.left < this.bounds.left) {
                     this.lastDir = 1;
+                    this.speed /= 1.2;
                     this.obj.position.left = this.bounds.left + (this.speed * 1.5);
                 } else if (this.obj.position.left > this.bounds.right - w) {
                     this.lastDir = -1;
+                    this.speed /= 1.2;
                     this.obj.position.left = this.bounds.right - w - (this.speed * 1.5);
                 }
             }
@@ -199,7 +222,6 @@
         //console.log('::::THIS TRUMP:::::' + this.obj.trump)
         this.obj.position.top = this.inKick;
 
-
         // see if we're close enough to kick in the y axis
         var trumpYDist = this.obj.position.top - this.obj.trump.image.data.width - this.obj.trump.position.top;
         //console.log('trumpYDist:' + trumpYDist)
@@ -207,10 +229,17 @@
         // If Player is close in Y, and inside X range, kick the Trump into AnimalArea
         if (trumpYDist < 10) {
 
-        // start the Trump moving, speed
-        this.obj.trump.speed = 40;
 
-        // TODO: ADD EDGE CASE WHERE TRUMP IN BOTTOM-LEFT, BOUNCE TO RIGHT
+            // start the Trump moving, speed
+            this.obj.trump.speed = 40;
+
+            // if too close to left wall, pre-assign a value
+            if (this.obj.trump.position.left < (this.bounds.left + 20)) {
+                console.log(">>Trump: left bound correction")
+                this.obj.trump.dx = -0.2;
+                this.obj.trump.dy = 0.8;
+                return;
+            }
 
             // compute dx and dy for Trump
             var dist = (this.obj.position.left - this.obj.trump.position.left) / 50;
@@ -223,11 +252,10 @@
                    this.obj.trump.dx = dx;
                     this.obj.trump.dy = 1.0 + dx;
 
-                } else if (dx == 0) {
-                    // slight randomization of dx
-                    var d = performance.now();
-                    (d = parseInt(d) - d);
-                    d = this.truncator(d, 2) / 10;
+                } else if (dx < 0.003) {
+                    var d = this.randomizer();
+                    d = d - this.randomizer();
+
                     this.obj.trump.dx = d;
                     this.obj.trump.dy = 1.0 + dx;
 
@@ -235,6 +263,7 @@
                     this.obj.trump.dx = 0;
                     this.obj.trump.dy = 0;
                 }
+
             }
         }
     } // end of function
@@ -252,6 +281,10 @@
         }
     }
 
+    /** 
+     * @method timeStampRandom
+     * @description randomize in a 10-fold range using window.performance
+     */
  	timeStampRandom () {
  		var d = new Date().getTime();
         if (window.performance && typeof window.performance.now === "function") {
@@ -273,7 +306,6 @@
     	return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
-
  	/** 
  	 * @method updateRandomWalk
  	 * @description generate random walk, with one preferred direction, 
@@ -291,13 +323,19 @@
  		}
 
         // compute dx and dy from random walk. store initial position
-        var oldLeft = this.obj.position.left;
-        var oldTop = this.obj.position.top;
+        this.oldLeft = this.obj.position.left;
+        this.oldTop = this.obj.position.top;
 
  		switch (this.direction) {
  			case 'top':
  				this.obj.position.top -= (this.speed + (0.1 * this.getRandom(1, this.speed)));
  				this.obj.position.left += 10 * (this.getRandom(-this.speed, this.speed));
+                if(isNaN(this.obj.position.left)) {
+                    //TODO: FIGURE OUT WHAT IS BEING COMPUTED AS NAN FOR THIS!!!!!
+                    //TODO: ADD ANIMAL REBOUNT TO HOME CAGE
+                    //TODO: ADD ANIMAL STAYS IN CAGE
+                    //TODO: ANIMALS "roll" AROUND STATIONARY TRUMP
+                }
  				break;
  			case 'left':
  				this.obj.position.left -= (this.speed + (0.1 * this.getRandom(1, this.speed)));
@@ -329,44 +367,85 @@
  				break;
  		}
 
-        var xdist = oldLeft - this.obj.position.left;
-        var ydist = oldTop - this.obj.position.top;
+        // Compute dx and dy for Animals
+        var xdist = this.oldLeft - this.obj.position.left;
+        var ydist = this.oldTop - this.obj.position.top;
         var sum = xdist + ydist;
-        this.obj.dx = xdist / sum;
-        this.obj.dy = ydist / sum;
+        if (sum > 0.0001) {
+            this.obj.dx = xdist / sum;
+            this.obj.dy = ydist / sum;  
+        } else {
+            this.obj.dx = 0;
+            this.obj.dy = 0;
+        }
 
+        // save our new position
+        this.oldLeft = this.obj.position.left;
+        this.oldTop = this.obj.position.top;
+
+        //console.log(' dx:' + this.obj.dx + ' dy:' + this.obj.dy + ' sum:' + sum)
     }
 
-    /**
-     * @method boxCollision
-     * detect intersection of two rectangles, and 
-     * rebound according to angle of collision
-     * @link https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-     * @link http://gamedevelopment.tutsplus.com/tutorials/when-worlds-collide-simulating-circle-circle-collisions--gamedev-769
-     */
-     calculateNewVelocities(firstBall, secondBall) {
+    calculateCollision (trump, animal) {
+        var w = this.obj.image.data.width;
+        var h = this.obj.image.data.height;
+        var aw = animal.image.data.width;
+        var ah = animal.image.data.height;
 
-        //reverse dx and dy between objects
-        //var newVelX2 = -firstBall.dx;
-        //var newVelY2 = -firstBall.dy;
- 
-        //var newVelX1 = -secondBall.dx;
-        //var newVelY1 = -secondBall.dy;
+        if (this.obj.position.left < animal.position.left + aw &&
+            this.obj.position.left + w > animal.position.left &&
+            this.obj.position.top < animal.position.top + ah &&
+            this.obj.position.top + h > animal.position.top) { 
+                
+                //get Trump centeral point
+                var tXCenter = this.obj.position.left + w/2;
+                var tYCenter = this.obj.position.top  + h/2;
 
-        console.log('firstBall.dx:' + firstBall.dx + ' secondBall.dx:' + secondBall.dx);
+                //get Animal central point
+                var aXCenter = animal.position.left + aw/2;
+                var aYCenter = animal.position.top + ah/2;
 
-        //firstBall.dx = newVelX1;
-        //firstBall.dy = newVelY1;
+                //compute x and y vector between centers
+                var cXDiff = tXCenter - aXCenter;
+                var cYDiff = tYCenter = aYCenter;
 
-        //secondBall.dx = newVelX2;
-        //secondBall.dy = newVelY2;
+                // Trump doesn't react if not moving (even if animal does)
+                if (trump.speed != 0 && trump.dx != 0 && trump.dy != 0) {
 
-        //firstBall.position.left += newVelX1;
-        //firstBall.position.top += newVelY1;
+                // move object so it isn't colliding anymore
+                if (cXDiff >= 0) {
+                    trump.position.x += (cXDiff + 1);
+                } else {
+                    trump.position.x -= (cXDiff + 1);
+                }
 
-        //secondBall.position.left += newVelX2;
-        //secondBall.position.top += newVelY2;
+                if (cYDiff >= 0) {
+                    trump.position.y += (cYDiff + 1);
+                } else {
+                    trump.position.y -= (cYDiff + 1);
+                }
+
+                // normalize new vectors
+                trump.dx = -cXDiff / cYDiff;
+                trump.dy = -cYDiff / cXDiff;
+
+                // rounding error
+                var ddif = Math.abs(trump.dx + trump.dy);
+                if (ddif > 1.0) {
+                    if (trump.dx >= 0) {
+                        trump.dy -= ddif;
+                    } else {
+                        trump.dy += ddif;
+                    }
+                }
+                } //end of Trump is moving
+                //console.log('dx::::::' + trump.dx + ' dy::::::' + trump.dy)
+
+            return true;                          
+        }
+        return false;
     }
+
 
     /** 
      * @method pingPong
@@ -420,29 +499,29 @@
                 if (this.obj.animals) {
                     for (var i = 0, len = this.obj.animals.length; i < len; i++) {
                         var animal = this.obj.animals[i];
-                        var aw = animal.image.data.width;
-                        var ah = animal.image.data.height;
-
+                        
+                        if (this.calculateCollision(this.obj, animal)) {
+                            //set the Animal's state to return home
+                        }
+                        /*
                         if (this.obj.position.left < animal.position.left + aw &&
                             this.obj.position.left + w > animal.position.left &&
                             this.obj.position.top < animal.position.top + ah &&
                             this.obj.position.top + h > animal.position.top) {                           
                                 this.calculateNewVelocities(this.obj, animal);
                             }
+                        */
                     }
                 }
 
             }
         }
-        //Let bounce 1 time off of bottom, but stop the second time
 
-    }
-
-    wasKicked () {
-
-    }
-
-    updatePingPong () {
+        //break out of horizontal move
+        if (this.obj.dy < 0.001 && this.obj.dx > 0.001) {
+            var d = this.randomizer();
+            this.obj.dy += d - this.randomizer();
+        }
 
     }
 

@@ -2,7 +2,6 @@
  * @class Mover
  * @description update position of object being animated by Game.
  */
-
 export default class Mover {
 
 	constructor (gameObj) {
@@ -24,7 +23,7 @@ export default class Mover {
 	}
 
     /** 
-     * @method truncate
+     * @method truncator
      * @description truncate (not round) number to fixed number of decimals
      * @param Number num floating-point number
      * @param Integer decimals the number of decimals points to round to
@@ -56,12 +55,12 @@ export default class Mover {
         }
     }
 
-	/** 
-	 * @method initSlider
-	 * @description slew object horizontally with keypresses
-	 * @param deg the degrees to rotate the Player. 
-     * NOTE: we also grab the 'Trump' object.
-	 */
+    /** 
+     * @method initSlew
+     * @description slew object horizontally with keypresses. Adds event 
+     * listeners for keydown and keyup events. Used for 
+     * Player characters moving horizontally in the PlayerArea
+     */
 	initSlew () {
         console.log('init Slew motion');
         this.type = this.SLEW;
@@ -99,8 +98,17 @@ export default class Mover {
 
     /** 
      * @method initRandomWalk
-     * @description init random motions along a path. Used for 
+     * @description init random motions along a path from the 
+     * top to the bottom of the screen. Used for 
      * Animal characters moving through the AnimalArea.
+     * @param Number prefSpeed the speed of movement
+     * @param String direction the direction the Animal ultimately moves, 
+     * - 'top': overall movement up the screen
+     * - 'left': overall movement to the screen left
+     * - 'bottom': overall movement to the screen bottom (DEFAULT)
+     * - 'right': overall movement to the screen right
+     * - 'return': return immediately to the Cage area
+     * - 'caged': stay in the Cage area
      */
     initRandomWalk (prefSpeed, direction) {
         console.log('init RandomWalk');
@@ -140,10 +148,10 @@ export default class Mover {
 
     /** 
      * @method initPingPong
-     * @description have a Trump init.
-     * NOTE: collision potential added separately
+     * @description init a ping-pong style motion. Used for 
+     * Trump characters moving through the AnimalArea.
      */
-    initPingPong (prefSpeed, trump) {
+    initPingPong (prefSpeed) {
         console.log('init PingPong motion');
         this.type = this.PINGPONG;
 
@@ -172,7 +180,7 @@ export default class Mover {
 
 	/** 
 	 * @method slew 
-	 * Move object slightly up for duration of space bar down
+	 * Move object slightly up for duration of space bar pressed down
      * Callback for keydown addEventListener
      * @param Event e the keydown event
      */
@@ -204,8 +212,13 @@ export default class Mover {
 
     /** 
      * @method updateSlew
-     * @description provide simple easing motion, also, bounce 
-     * off walls.
+     * @description move back and forth horizontally, with a simple easing motion
+     * when left and right arrow keys are pressed. Handle collisions with the left 
+     * and right walls of the PlayerArea.
+     * Call in an update function inside the Character, e.g. 
+     * update () { updateRandomWalk(); }
+     * The main Game object automatically finds and 'fires' update() function in 
+     * all Characters.
      */
     updateSlew () {
         if (!this.inited) {
@@ -340,14 +353,15 @@ export default class Mover {
    	return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
-	/** 
-	 * @method updateRandomWalk
-	 * @description generate random walk, with one preferred direction, 
-	 * used by Animals.
-     * this.obj.direction is the overall path the Animal is following to one of the 
-     * four walls of the AnimalArea. If it is 'return' it has collided with a Trump
-     * and is returning to its cage.
-	 */
+    /** 
+     * @method updateRandomWalk
+     * @description generate a random walk, with one preferred direction, 
+     * giving the meandering motion used by Animals. 
+     * Call in an update function inside the Character, e.g. 
+     * update () { updateRandomWalk(); }
+     * The main Game object automatically finds and 'fires' update() function in 
+     * all Characters.
+     */
 	updateRandomWalk () {
         if (!this.inited) {
             console.error('Animal RandomWalk NOT initialized (did you leave out of constructor?)');
@@ -360,7 +374,7 @@ export default class Mover {
 			return;
 		}
 
-        // Play animal's opening sound once at start of movement
+        // Play animal's opening sound ONCE at start of movement
         if (this.firstMove && this.game.soundPool) {
             this.game.soundPool.playSound(this.obj.constructor.name.toLowerCase(), 0.7);
             this.firstMove = false;
@@ -370,6 +384,7 @@ export default class Mover {
         this.oldLeft = this.obj.position.left;
         this.oldTop = this.obj.position.top;
 
+        // this.obj.direction was set in initRandomWalk
 		switch (this.obj.direction) {
 			case 'top':
 				this.obj.position.top -= (this.speed + (0.1 * this.getRandom(1, this.speed)));
@@ -490,13 +505,18 @@ export default class Mover {
         return false;
     }
 
-
     /** 
-     * @method pingPong
-     * @description move in a ping-pong style. This is specific to the game.
-     * 1. collision starts the character moving
-     * 2. they bounce on all walls EXCEPT the one they were closest to when collide with
-     * 3. when they intersect that wall, they stop
+     * @method updatePingPong
+     * @description move in a ping-pong style.
+     * Call in an update function inside the Character, e.g. 
+     * update () { updateRandomWalk(); }
+     * The main Game object automatically finds and 'fires' update() function in 
+     * all Characters.
+     * Possible updates for motion:
+     * 1. Collision with a Player (via kick() method) starts the Trump character moving
+     * 2. Trump will bounce on all walls EXCEPT the bottom wall
+     * 3. When the Trump intersects the bottom wall, they stop moving
+     * 4. If they collide with an Animal, they bounce, and the Animal returns to its Cage.
      */
     updatePingPong () {
 

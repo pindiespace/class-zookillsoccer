@@ -3,8 +3,9 @@
  * @description create the collision matrix defining which objects can collide 
  * with which objects. Objects that can collide have their potential colliders 
  * added as references, e.g. Player.trump or Trump.player.
+ * @param Array characterArray the array of Characters who might be involved 
+ * in collisions.
  */
-
  export default class Collider {
 
  	constructor (characterArray) {

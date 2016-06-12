@@ -18,7 +18,7 @@
 
  	// >>>>>>>>>>>ADDED IN WEEK 11
  		//Trump gets PingPong motion
- 		this.mover.initPingPong(0, this);
+ 		this.mover.initPingPong(0);
  	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
  	}

@@ -1,13 +1,13 @@
 Searching 34 files for "ADDED IN WEEK 11" (case sensitive)
 
 C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\dist\public
-	Added audio folder
+	Added audio folder to /public
 
 C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js
 	Added Sounder.js
 
 C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\dist\public\audio
-	Added sound files
+	Added sound files to /public/audio folder
 
 C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\Animal.js:
    11   import StaticImage from './StaticImage.js';
@@ -15,23 +15,22 @@ C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\A
    13:  // >>>>>>>>>>>ADDED IN WEEK 11
    14   import Mover from './Mover.js';
    15   import Collider from './Collider.js';
+   16   // END ADDED IN WEEK 11<<<<<<<<<<<<<<
    ..
    21   		super (config);
    22  
    23:  		// >>>>>>>>>>>ADDED IN WEEK 11
    24   		// Animals get RandomWalk motion
    25   		this.mover.initRandomWalk(0.02, 'bottom');
-   26:  		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-   27  
+   26   		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+   ..
    28   	}
    29  
    30:  	// >>>>>>>>>>>ADDED IN WEEK 11
    31   	update () {
    32   		this.mover.updateRandomWalk();
-   33   	}
-   34:  	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-   35  
-   36   }
+   33   		}
+   34   	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\Character.js:
    11   import StaticImage from './StaticImage.js';
@@ -39,45 +38,43 @@ C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\C
    13:  // >>>>>>>>>>>ADDED IN WEEK 11
    14   import Mover from './Mover.js';
    15   import Collider from './Collider.js';
-   ..
-   30   		window.theGame = config.game;
+   16   // END ADDED IN WEEK 11<<<<<<<<<<<<<<
    31  
    32:  		// >>>>>>>>>>>ADDED IN WEEK 11
    33   		this.mover = new Mover(this);
-   34:  		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-   35  
-   36  
+   34   		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
    ..
    52  		if (this.image) {
    53  			var img = this.image.data;
-   54:  			// >>>>>>>>>>>ADDED IN WEEK 11
+   54:  		// >>>>>>>>>>>ADDED IN WEEK 11
    55  			//console.log('drawing')
-   56: 			// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-   57  			if (img) {
-   58  				// draw image into HTML5 canvas
+   56  			// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\Game.js:
    40  import PlayerArea from './PlayerArea.js';
    41  
    42: // >>>>>>>>>>>ADDED IN WEEK 11
    43  import Collider from './Collider.js';
-   44: // END ADDED IN WEEK 11<<<<<<<<<<<<<<
-   45  
-   46  export default class Game extends GamePiece {
+   44  import Sounder from './Sounder.js';
    ..
-  180  		this.loadTrumps();
-  181  
-  182: 		// >>>>>>>>>>>ADDED IN WEEK 11
-  183  		this.collider = new Collider(this.displayCharacters);
-  184: 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-  185  
-  186  		//make GameScreen visible
+  176  	startGame () {
+  177  
+  178: 		// >>>>>>>>>>>ADDED IN WEEK 11
+  179  		//load audio samples
+  180  		this.soundPool = new Sounder();
+  181: 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
   ...
-  262  	draw () {
-  263  
-  264:  		// >>>>>>>>>>>ADDED IN WEEK 11
-  265  		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  266   		// END ADDED WEEK 11<<<<<<<<<<<<<
+  191  		this.loadTrumps();
+  192  
+  193: 		// >>>>>>>>>>>ADDED IN WEEK 11
+  194  		this.collider = new Collider(this.displayCharacters);
+  195  		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+  ...
+  273  	draw () {
+  274  
+  275:  	// >>>>>>>>>>>ADDED IN WEEK 11
+  276  		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  277   	// END ADDED WEEK 11<<<<<<<<<<<<<
 
 C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\Player.js:
     7   import Character from './Character.js';
@@ -90,16 +87,14 @@ C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\P
    18  
    19:  		// >>>>>>>>>>>ADDED IN WEEK 11
    20   		this.mover.initSlew();
-   21:   		// END ADDED IN WEEK 11<<<<<<<<<<<<<<		
+   21    		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
    22   	}
    23  
    24:   	// >>>>>>>>>>>ADDED IN WEEK 11
    25   	update () {
    26   		this.mover.updateSlew();
    27   	}
-   28:  	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-   29  
-   30  
+   28   	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\Trump.js:
     7   import Character from './Character.js';
@@ -110,19 +105,16 @@ C:\Users\Pete\Documents\pete\websites\plyojump2\games\zookillsoccer\modules\js\T
    ..
    17   		super (config);
    18  
-   19:  	// >>>>>>>>>>>ADDED IN WEEK 11
+   19:  		// >>>>>>>>>>>ADDED IN WEEK 11
    20   		//Trump gets PingPong motion
    21   		this.mover.initPingPong(0, this);
-   22:  	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-   23  
+   22   		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+   23   
    24   	}
    25  
    26:  	// >>>>>>>>>>>ADDED IN WEEK 11
    27   	update () {
    28   		this.mover.updatePingPong();
    29   	}
-   30:  	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-   31  
-   32   }
-
-25 matches across 5 files
+   30   	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+16 matches across 5 files

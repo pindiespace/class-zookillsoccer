@@ -27,13 +27,9 @@
  		this.position = config.position;
  		this.size = config.size;
 
- 		window.theGame = config.game;
-
  		// >>>>>>>>>>>ADDED IN WEEK 11
  		this.mover = new Mover(this);
  		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
-
-
 
  		this.image = new StaticImage(
  			{

@@ -41,6 +41,7 @@ import PlayerArea from './PlayerArea.js';
 
 // >>>>>>>>>>>ADDED IN WEEK 11
 import Collider from './Collider.js';
+import Sounder from './Sounder.js';
 // END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 export default class Game extends GamePiece {
@@ -174,13 +175,23 @@ export default class Game extends GamePiece {
 
 	startGame () {
 
+		// >>>>>>>>>>>ADDED IN WEEK 11
+		//load audio samples
+		this.soundPool = new Sounder();
+		this.soundPool.addSound('kick', 0.7);
+		this.soundPool.addSound('lion', 0.7);
+		this.soundPool.addSound('tiger', 0.7);
+		this.soundPool.addSound('bear', 0.7);
+		this.soundPool.addSound('gorilla', 0.7);
+		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+
 		//load Characters
 		this.loadAnimals();
 		this.loadPlayers();
 		this.loadTrumps();
 
 		// >>>>>>>>>>>ADDED IN WEEK 11
-		this.collder = new Collider(this.displayCharacters);
+		this.collider = new Collider(this.displayCharacters);
 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 		//make GameScreen visible

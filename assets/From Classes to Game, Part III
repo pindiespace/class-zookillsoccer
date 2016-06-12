@@ -14,6 +14,10 @@ Import the Mover and Collider Classes into Animal
  	
  }
 
+====================================
+TODO: TEST FOR GAME END CONDITION
+TODO: ADD SOUND FOR TRUMP COLLISION
+====================================
 
 
 ======================================
@@ -23,6 +27,7 @@ CONVERT AFTER COURSE ENDS
 
 Classes
 Add Image, StaticImage, DynamicImage
+Add Sound
 
 
 CSS styles
@@ -35,6 +40,7 @@ Trump
 randomize Trump position at start
 
 Game
+delay game load until all object Images have loaded (Promise??)
 do object-specific clear, instead of global canvas clear
 
 Movers

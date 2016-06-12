@@ -16,7 +16,10 @@
  	constructor (config) {
  		super (config);
 
+ 	// >>>>>>>>>>>ADDED IN WEEK 11
+ 		//Trump gets PingPong motion
  		this.mover.initPingPong(0, this);
+ 	// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
  	}
 

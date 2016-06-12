@@ -17,6 +17,10 @@ export default class Mover {
         this.RANDOM = 2;
         this.PINGPOING = 3;
 
+        if (!this.game.soundPool) {
+            console.warn('no sounds initialized. Game will play silently');
+        }
+
 	}
 
     /** 
@@ -59,8 +63,9 @@ export default class Mover {
      * NOTE: we also grab the 'Trump' object.
 	 */
 	initSlew () {
-        console.log('initing slew motion');
+        console.log('init Slew motion');
         this.type = this.SLEW;
+
 
         this.speed = 0;
         this.ticker = 0;
@@ -81,6 +86,9 @@ export default class Mover {
 
         // NOTE: Trump is added to Player in Collider
 
+        // flag our initialization
+        this.inited = true;
+
         // listen for user events
         document.addEventListener('keydown', 
             event => this.slew(event), false);
@@ -90,12 +98,12 @@ export default class Mover {
 	}
 
     /** 
-     * @method initRandom
+     * @method initRandomWalk
      * @description init random motions along a path. Used for 
      * Animal characters moving through the AnimalArea.
      */
-    initRandom (prefSpeed, direction) {
-        console.log('init random motion');
+    initRandomWalk (prefSpeed, direction) {
+        console.log('init RandomWalk');
         this.type = this.RANDOM;
 
         this.speed = prefSpeed * this.timeStampRandom();
@@ -106,13 +114,15 @@ export default class Mover {
         this.MAX = 30;
         this.MAX_DELAY = 300;
 
+        // one-time play of Animal sound
+        this.firstMove = true;
+
         // add bottom, right to make a Rect for the AnimalArea
         this.bounds = this.game.screens['game-screen'].animalAreas[0].position;
         this.bounds.width = this.game.screens['game-screen'].animalAreas[0].size.width;
         this.bounds.height = this.game.screens['game-screen'].animalAreas[0].size.height;
         this.bounds.bottom = this.bounds.top + this.bounds.height;
         this.bounds.right = this.bounds.left + this.bounds.width;
-
 
         // remember where we started (in the cage)
         this.startTop = this.obj.position.top;
@@ -123,6 +133,9 @@ export default class Mover {
 
         // get bottom and right from Character from its Image
         this.image = this.obj.image;
+
+        // flag our initialization
+        this.inited = true;
     }
 
     /** 
@@ -131,7 +144,7 @@ export default class Mover {
      * NOTE: collision potential added separately
      */
     initPingPong (prefSpeed, trump) {
-        console.log('init pingpong motion');
+        console.log('init PingPong motion');
         this.type = this.PINGPONG;
 
         //Animal area
@@ -153,6 +166,8 @@ export default class Mover {
 
         // NOTE: Animals and Players are added to Trump in Collider
 
+        // flag our initialization
+        this.inited = true;
     }
 
 	/** 
@@ -193,6 +208,10 @@ export default class Mover {
      * off walls.
      */
     updateSlew () {
+        if (!this.inited) {
+            console.error('Player Slew NOT initialized (did you leave out of constructor?)');
+            return;
+        }
         this.ticker++;
         if (this.speed > 0) {
             if (this.ticker > 10) {
@@ -229,13 +248,17 @@ export default class Mover {
         //console.log('::::THIS TRUMP:::::' + this.obj.trump)
         this.obj.position.top = this.inKick;
 
+        if (!this.obj.trump) {
+            console.error('Error: missing collision matrix (did you include Collider?)');
+            return;
+        }
+
         // see if we're close enough to kick in the y axis
         var trumpYDist = this.obj.position.top - this.obj.trump.image.data.width - this.obj.trump.position.top;
         //console.log('trumpYDist:' + trumpYDist)
 
         // If Player is close in Y, and inside X range, kick the Trump into AnimalArea
         if (trumpYDist < 10) {
-
 
             // start the Trump moving, speed
             this.obj.trump.speed = 40;
@@ -255,6 +278,7 @@ export default class Mover {
                 if(dx > 0.003 && dx < 0.8) {
                    this.obj.trump.dx = dx;
                     this.obj.trump.dy = 1.0 - dx;
+                    // start the kicking sound
                 } else if (dx < 0 && dx > -0.8) {
                    this.obj.trump.dx = dx;
                     this.obj.trump.dy = 1.0 + dx;
@@ -263,9 +287,15 @@ export default class Mover {
                     d = d - this.randomizer();
                     this.obj.trump.dx = d;
                     this.obj.trump.dy = 1.0 + dx;
+                    // start the kicking sound
                 } else {
                     this.obj.trump.dx = 0;
                     this.obj.trump.dy = 0;
+                }
+
+                // start the kicking sound
+                if (this.game.soundPool) {
+                    this.game.soundPool.playSound('kick');
                 }
 
             }
@@ -319,12 +349,22 @@ export default class Mover {
      * and is returning to its cage.
 	 */
 	updateRandomWalk () {
+        if (!this.inited) {
+            console.error('Animal RandomWalk NOT initialized (did you leave out of constructor?)');
+            return;
+        }
 		this.counter++;
 		this.delayCounter++;
 		if (this.delayCounter < this.delay) {
 			//console.log('delayCounter:' + this.delayCounter + ' MAX:' + this.MAX_DELAY);
 			return;
 		}
+
+        // Play animal's opening sound once at start of movement
+        if (this.firstMove && this.game.soundPool) {
+            this.game.soundPool.playSound(this.obj.constructor.name.toLowerCase(), 0.7);
+            this.firstMove = false;
+        }
 
         // compute dx and dy from random walk. store initial position
         this.oldLeft = this.obj.position.left;
@@ -341,14 +381,11 @@ export default class Mover {
 				break;
 			case 'bottom':
  				if (this.counter > this.MAX) {
- 					//////this.MAX =4;
                     this.MAX = this.getRandom(2, 15);
-                    //console.log("THIS MAX:" + this.MAX)
 					this.newLeft = (this.getRandom(-this.speed, this.speed));
 					this.counter = 0;
 				} else if (this.counter > this.MAX / 2) {
-					//this.speed += this.timeStampRandom() / 240;
-                    this.speed = this.getRandom(-0.2, 1)
+                    this.speed = this.getRandom(-0.2, 1.2) //NOTE: fine-tune this to make gameplay harder
 				}
 				this.obj.position.top += this.speed;
                 var r = this.getRandom(-1, 1);
@@ -462,6 +499,11 @@ export default class Mover {
      * 3. when they intersect that wall, they stop
      */
     updatePingPong () {
+
+        if (!this.inited) {
+            console.error('Trump PingPong NOT initialized (did you leave out of constructor?)');
+            return;
+        }
         //console.log('dx:' + this.obj.dx + ' dy:' + this.obj.dy);
         this.obj.position.left -= this.obj.speed * this.obj.dx;
         this.obj.position.top -= this.obj.speed * this.obj.dy;
@@ -519,7 +561,7 @@ export default class Mover {
                             console.log('>>>RETURNING ANIMAL TO CAGE')
                             animal.direction = 'return';
                             if (this.obj.speed < 2) {
-                                this.obj.speed = 2; /////////////////////////////
+                                this.obj.speed = 2;
                             }
                         }
                     }

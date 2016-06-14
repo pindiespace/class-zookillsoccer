@@ -81,6 +81,7 @@ export default class Sounder {
 		}
 		this.sounds[name] = e.target;
 		this.sounds[name].volume = volume;
+		console.log('added sound:' + name)
 	}
 
 	/** 
@@ -148,10 +149,11 @@ export default class Sounder {
 	 * WITHOUT a file extension in the /audio folder for the game.
 	 */
 	playSound (name) {
+		// Check for no sounds (loaded sound in game.js without doing new Sounder() )
 		if (this.sounds[name]) {
 			this.sounds[name].play();
 		} else {
-			console.error('no sound file with name:' + name + ' in audio folder');
+			console.error('no sound file with name:' + name + ' in audio folder (OR you called addSound BEFORE you did new Sounder() in your code...');
 		}
 	}
 

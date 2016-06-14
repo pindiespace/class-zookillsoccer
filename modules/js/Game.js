@@ -183,6 +183,7 @@ export default class Game extends GamePiece {
 		this.soundPool.addSound('tiger', 0.7);
 		this.soundPool.addSound('bear', 0.7);
 		this.soundPool.addSound('gorilla', 0.7);
+		window.soundPool = this.soundPool;
 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 		//load Characters

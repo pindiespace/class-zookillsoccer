@@ -40,6 +40,11 @@ export default class Image extends Info {
 		}
 	}
 
+	clear (domId) {
+		document.getElementById(domId).removeChild(this.data);
+		this.data = null;
+	}
+
 	// load image, append to existing DOM element
 	// NOTE: this is over-written in Character.js, which loads images into Canvas
 	loadImageToDOM (domId, path, callback) {
@@ -51,7 +56,6 @@ export default class Image extends Info {
 				callback();
 			}
 		});
-
 	}
 
 	// load image as a CSS background image into existing DOM element. 

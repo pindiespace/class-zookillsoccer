@@ -42,6 +42,7 @@ import PlayerArea from './PlayerArea.js';
 // >>>>>>>>>>>ADDED IN WEEK 11
 import Collider from './Collider.js';
 import Sounder from './Sounder.js';
+import Scorer from './Scorer.js';
 // END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 export default class Game extends GamePiece {
@@ -178,12 +179,14 @@ export default class Game extends GamePiece {
 		// >>>>>>>>>>>ADDED IN WEEK 11
 		//load audio samples
 		this.soundPool = new Sounder();
+
 		this.soundPool.addSound('kick', 0.7);
 		this.soundPool.addSound('lion', 0.7);
 		this.soundPool.addSound('tiger', 0.7);
 		this.soundPool.addSound('bear', 0.7);
 		this.soundPool.addSound('gorilla', 0.7);
 		window.soundPool = this.soundPool;
+
 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 		//load Characters
@@ -193,6 +196,9 @@ export default class Game extends GamePiece {
 
 		// >>>>>>>>>>>ADDED IN WEEK 11
 		this.collider = new Collider(this.displayCharacters);
+
+		// Add game over test
+		this.scorer = new Scorer(this);
 		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
 
 		//make GameScreen visible
@@ -222,6 +228,17 @@ export default class Game extends GamePiece {
 		// go to end screen
 		this.screens[this.GAME_SCREEN_ID].hideScreen();
 		this.screens[this.END_SCREEN_ID].showScreen();
+
+		// >>>>>>>>>>>ADDED IN WEEK 11
+		// show the score
+		this.screens[this.END_SCREEN_ID].showScore(this.scorer.won);
+		// Null everything
+		this.sounder = null;
+		this.displayCharacters = [];
+		this.collider = null;
+		this.scorer = null;
+		// END ADDED IN WEEK 11<<<<<<<<<<<<<<
+
 	}
 
 	elapsed () {
@@ -244,6 +261,11 @@ export default class Game extends GamePiece {
 
 		if (this.elapsed() > this.TIMEOUT) {
 			// if idle too long, reset game to start
+			return true;
+		}
+
+		// check if gameplay is complete
+		if (this.scorer.gameOver()) {
 			return true;
 		}
 

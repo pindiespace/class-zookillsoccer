@@ -5,11 +5,13 @@ body {
   background-color: #eee; }
 
 /* for debugging, show all the HTML elements */
+/*
 * {
-  border: 1px solid black;
-  margin: 4px;
-  padding: 4px; }
-
+	border: $defaultBorder;
+	margin: $defaultMargin;
+	padding: $defaultPadding;
+}
+*/
 /* Initially hide all the game screens, let game JS show */
 #start-screen, #game-screen, #end-screen {
   background-color: #eeffcc;

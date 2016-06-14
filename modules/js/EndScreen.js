@@ -5,6 +5,7 @@
  */
  import GamePiece from './GamePiece.js';
  import Screen from './Screen.js';
+ import Identity from './Identity.js';
  
  export default class EndScreen extends Screen {
 
@@ -21,6 +22,48 @@
  		// Bind "play again" and "instructions" buttons.
  		this.bindReplay();
  		this.bindInstructions();
+ 	}
+
+ 	loadIdentity (won) {
+
+ 		if (this.identity) {
+ 			this.identity.clear('end-screen-identity');
+ 		}
+
+ 		if (won) {
+			this.identity = new Identity(
+				{
+					name: 'identity', 
+					domId: 'end-screen-identity',
+					path: 'img/identity/won.png', 
+					author: 'pete markiewicz', 
+					source: 'plyojump'
+				}
+			);
+ 		} else {
+			this.identity = new Identity(
+				{
+					name: 'identity', 
+					domId: 'end-screen-identity',
+					path: 'img/identity/lost.png', 
+					author: 'pete markiewicz', 
+					source: 'plyojump'
+				}
+			);
+ 		}
+
+ 	}
+ 
+ 	//TODO: use a StaticText object, and add to EndScreen
+ 	showScore (won) {
+ 		this.loadIdentity(won);
+ 		/*
+ 		if (won) {
+ 			alert ("you won")
+ 		} else {
+ 			alert ("you lost")
+ 		}
+ 		*/
  	}
 
  	loadInputScore () {

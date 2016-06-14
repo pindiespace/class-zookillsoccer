@@ -13,4 +13,5 @@ export default class Score extends DynamicText {
 	constructor (config) {
 		super(config);
 	}
+
 }

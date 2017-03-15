@@ -1,7 +1,8 @@
-# zookillsoccer
+
+# ![zookillsoccer](docs/images/logo.png)
 ---------------------
 
-A basic game designed to teach concepts in OOP programming. Derived from es6-boilerplate on this same site.
+A basic game designed to teach students concepts in OOP programming. Uses ES6 and OOP-based programming techniques.
 
 ## Setup and installation (Make sure NodeJS is installed)
 1. Open TWO terminal windows

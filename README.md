@@ -4,6 +4,10 @@
 
 A basic game designed to teach students concepts in OOP programming. Uses ES6 and OOP-based programming techniques.
 
+## Example
+
+Check out [the example here](http://plyojump.com/assets/projects/zookillsoccer).
+
 ## Setup and installation (Make sure NodeJS is installed)
 1. Open TWO terminal windows
 1. Navigate into the default directory (both Terminal windows)
